@@ -1,0 +1,11 @@
+# Data Directory for School Management System
+
+This folder contains the JSON data files for the school management system.
+The basic structure files are stored in GitHub for easy deployment.
+
+Default files included in the repository:
+- students.json: Contains all student records
+- teachers.json: Contains all teacher records
+- settings.json: Contains school settings and configuration
+
+Note: Export files (export_*.json) are excluded from Git by the .gitignore file.

@@ -1,0 +1,14 @@
+{
+  "name": "sri-lanka-school-management",
+  "version": "1.0.0",
+  "description": "Offline School Management System for Sri Lankan Schools",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

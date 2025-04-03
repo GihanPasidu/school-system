@@ -1,0 +1,197 @@
+// Charts for dashboard visualization
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize charts after database is loaded
+    setTimeout(() => {
+        initCharts();
+    }, 1000);
+});
+
+async function initCharts() {
+    try {
+        const students = await schoolDB.getAll('students');
+        const teachers = await schoolDB.getAll('teachers');
+        
+        createGradeDistributionChart(students);
+        createSubjectDistributionChart(teachers);
+        populateRecentAdmissions(students);
+        updateStudentTeacherRatio(students, teachers);
+    } catch (error) {
+        console.error('Error initializing charts:', error);
+    }
+}
+
+function createGradeDistributionChart(students) {
+    // Count students per grade
+    const grades = {};
+    for (let i = 1; i <= 13; i++) {
+        grades[i] = 0;
+    }
+    
+    students.forEach(student => {
+        const grade = parseInt(student.grade);
+        if (grades.hasOwnProperty(grade)) {
+            grades[grade]++;
+        }
+    });
+    
+    const ctx = document.getElementById('gradeChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(grades).map(grade => `Grade ${grade}`),
+            datasets: [{
+                label: 'Number of Students',
+                data: Object.values(grades),
+                backgroundColor: 'rgba(26, 115, 232, 0.7)',
+                borderColor: 'rgba(26, 115, 232, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            return context[0].label;
+                        },
+                        label: function(context) {
+                            return `${context.parsed.y} students`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function createSubjectDistributionChart(teachers) {
+    // Count teachers per subject
+    const subjects = {};
+    teachers.forEach(teacher => {
+        const subject = teacher.subject || 'Unspecified';
+        if (subjects[subject]) {
+            subjects[subject]++;
+        } else {
+            subjects[subject] = 1;
+        }
+    });
+    
+    // Sort subjects by count
+    const sortedSubjects = Object.entries(subjects)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 7); // Take top 7 subjects for readability
+    
+    const subjectNames = sortedSubjects.map(s => s[0]);
+    const subjectCounts = sortedSubjects.map(s => s[1]);
+    
+    // Create color palette
+    const colors = [
+        'rgba(52, 168, 83, 0.7)',
+        'rgba(66, 133, 244, 0.7)',
+        'rgba(251, 188, 5, 0.7)',
+        'rgba(234, 67, 53, 0.7)',
+        'rgba(193, 142, 235, 0.7)',
+        'rgba(26, 188, 156, 0.7)',
+        'rgba(241, 196, 15, 0.7)',
+    ];
+    
+    const ctx = document.getElementById('subjectChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: subjectNames,
+            datasets: [{
+                data: subjectCounts,
+                backgroundColor: colors,
+                borderColor: colors.map(color => color.replace('0.7', '1')),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            return `${label}: ${value} teachers`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function populateRecentAdmissions(students) {
+    const recentStudentsList = document.getElementById('recent-students-list');
+    if (!recentStudentsList) return;
+    
+    // Sort by ID (assuming newer students have higher IDs)
+    const sortedStudents = [...students].sort((a, b) => b.id - a.id).slice(0, 5);
+    
+    recentStudentsList.innerHTML = '';
+    if (sortedStudents.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="4" style="text-align: center;">No students found</td>`;
+        recentStudentsList.appendChild(row);
+        return;
+    }
+    
+    sortedStudents.forEach(student => {
+        const row = document.createElement('tr');
+        const admissionDate = new Date(student.dob || new Date());
+        // Format date as YYYY-MM-DD
+        const formattedDate = admissionDate.toISOString().split('T')[0];
+        
+        row.innerHTML = `
+            <td>${student.admission}</td>
+            <td>${student.name}</td>
+            <td>Grade ${student.grade}</td>
+            <td>${formattedDate}</td>
+        `;
+        recentStudentsList.appendChild(row);
+    });
+}
+
+function updateStudentTeacherRatio(students, teachers) {
+    const ratioElement = document.getElementById('ratio');
+    if (!ratioElement) return;
+    
+    const studentCount = students.length;
+    const teacherCount = teachers.length;
+    
+    if (teacherCount === 0) {
+        ratioElement.textContent = 'N/A';
+        return;
+    }
+    
+    // Calculate ratio and round to 2 decimal places
+    const ratio = studentCount / teacherCount;
+    const formattedRatio = ratio.toFixed(1);
+    
+    ratioElement.textContent = `${formattedRatio}:1`;
+}
+
+// Re-initialize charts when dashboard is shown
+document.getElementById('dashboard-btn').addEventListener('click', function() {
+    setTimeout(initCharts, 100);
+});

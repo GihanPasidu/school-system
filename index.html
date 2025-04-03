@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Lanka School Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/db.js" defer></script>
+    <script src="js/app.js" defer></script>
+    <script src="js/charts.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-graduation-cap"></i> Sri Lanka School Management</h1>
+            <div class="school-details">
+                <h2 id="schoolName">School Management</h2>
+                <p id="schoolAddress">Offline System</p>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <nav>
+                <ul>
+                    <li><button id="dashboard-btn" class="active"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></button></li>
+                    <li><button id="students-btn"><i class="fas fa-user-graduate"></i> <span>Students</span></button></li>
+                    <li><button id="teachers-btn"><i class="fas fa-chalkboard-teacher"></i> <span>Teachers</span></button></li>
+                    <li><button id="settings-btn"><i class="fas fa-cog"></i> <span>Settings</span></button></li>
+                </ul>
+            </nav>
+
+            <main id="content-area">
+                <!-- Dashboard View -->
+                <section id="dashboard" class="page active">
+                    <h2>Dashboard</h2>
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <h3>Total Students</h3>
+                            <p id="student-count">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Teachers</h3>
+                            <p id="teacher-count">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Student-Teacher Ratio</h3>
+                            <p id="ratio">0:0</p>
+                        </div>
+                    </div>
+
+                    <div class="chart-containers">
+                        <div class="chart-card">
+                            <h3>Students per Grade</h3>
+                            <div class="chart-container">
+                                <canvas id="gradeChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>Teachers per Subject</h3>
+                            <div class="chart-container">
+                                <canvas id="subjectChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-container">
+                        <div class="data-header">
+                            <h3>Recent Student Admissions</h3>
+                        </div>
+                        <table id="recent-students">
+                            <thead>
+                                <tr>
+                                    <th>Admission No</th>
+                                    <th>Name</th>
+                                    <th>Grade</th>
+                                    <th>Date Admitted</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-students-list">
+                                <!-- Recent students will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Students Management -->
+                <section id="students" class="page">
+                    <h2>Students Management</h2>
+                    
+                    <div class="data-container">
+                        <div class="data-header">
+                            <h3>Student Records</h3>
+                            <div class="action-buttons">
+                                <input type="text" id="student-search" placeholder="Search students...">
+                                <button id="add-student-btn"><i class="fas fa-plus"></i> Add New Student</button>
+                            </div>
+                        </div>
+
+                        <form id="student-form" class="data-form hidden">
+                            <h3><i class="fas fa-user-graduate"></i> Student Information</h3>
+                            <input type="hidden" id="student-id">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="student-name">Full Name</label>
+                                    <input type="text" id="student-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="student-admission">Admission Number</label>
+                                    <input type="text" id="student-admission" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="student-dob">Date of Birth</label>
+                                    <input type="date" id="student-dob" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="student-grade">Grade</label>
+                                    <select id="student-grade" required>
+                                        <option value="">Select Grade</option>
+                                        <option value="1">Grade 1</option>
+                                        <option value="2">Grade 2</option>
+                                        <option value="3">Grade 3</option>
+                                        <option value="4">Grade 4</option>
+                                        <option value="5">Grade 5</option>
+                                        <option value="6">Grade 6</option>
+                                        <option value="7">Grade 7</option>
+                                        <option value="8">Grade 8</option>
+                                        <option value="9">Grade 9</option>
+                                        <option value="10">Grade 10</option>
+                                        <option value="11">Grade 11</option>
+                                        <option value="12">Grade 12</option>
+                                        <option value="13">Grade 13</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="student-contact">Parent Contact</label>
+                                    <input type="tel" id="student-contact">
+                                </div>
+                                <div class="form-group">
+                                    <label for="student-address">Address</label>
+                                    <input type="text" id="student-address">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" id="cancel-student" class="secondary-button"><i class="fas fa-times"></i> Cancel</button>
+                                <button type="submit" id="save-student" class="success-button"><i class="fas fa-save"></i> Save</button>
+                            </div>
+                        </form>
+
+                        <table id="students-table">
+                            <thead>
+                                <tr>
+                                    <th>Admission No</th>
+                                    <th>Name</th>
+                                    <th>Grade</th>
+                                    <th>Contact</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="students-list">
+                                <!-- Student records will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Teachers Management -->
+                <section id="teachers" class="page">
+                    <h2>Teachers Management</h2>
+                    
+                    <div class="data-container">
+                        <div class="data-header">
+                            <h3>Teacher Records</h3>
+                            <div class="action-buttons">
+                                <input type="text" id="teacher-search" placeholder="Search teachers...">
+                                <button id="add-teacher-btn"><i class="fas fa-plus"></i> Add New Teacher</button>
+                            </div>
+                        </div>
+
+                        <form id="teacher-form" class="data-form hidden">
+                            <h3><i class="fas fa-chalkboard-teacher"></i> Teacher Information</h3>
+                            <input type="hidden" id="teacher-id">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="teacher-name">Full Name</label>
+                                    <input type="text" id="teacher-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="teacher-emp-id">Employee ID</label>
+                                    <input type="text" id="teacher-emp-id" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="teacher-subject">Subject</label>
+                                    <input type="text" id="teacher-subject" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="teacher-contact">Contact Number</label>
+                                    <input type="tel" id="teacher-contact" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="teacher-email">Email</label>
+                                    <input type="email" id="teacher-email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="teacher-qualification">Qualification</label>
+                                    <input type="text" id="teacher-qualification">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" id="cancel-teacher" class="secondary-button"><i class="fas fa-times"></i> Cancel</button>
+                                <button type="submit" id="save-teacher" class="success-button"><i class="fas fa-save"></i> Save</button>
+                            </div>
+                        </form>
+
+                        <table id="teachers-table">
+                            <thead>
+                                <tr>
+                                    <th>Employee ID</th>
+                                    <th>Name</th>
+                                    <th>Subject</th>
+                                    <th>Contact</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teachers-list">
+                                <!-- Teacher records will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Settings -->
+                <section id="settings" class="page">
+                    <h2>Settings</h2>
+                    <div class="settings-card">
+                        <h3><i class="fas fa-school"></i> School Information</h3>
+                        <form id="school-settings-form">
+                            <div class="form-group">
+                                <label for="setting-school-name">School Name</label>
+                                <input type="text" id="setting-school-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="setting-school-address">School Address</label>
+                                <input type="text" id="setting-school-address">
+                            </div>
+                            <div class="form-group">
+                                <label for="setting-school-phone">School Phone</label>
+                                <input type="tel" id="setting-school-phone">
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="success-button"><i class="fas fa-save"></i> Save Settings</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3><i class="fas fa-database"></i> Data Management</h3>
+                        <div class="data-management">
+                            <button id="export-data"><i class="fas fa-file-export"></i> Export Data</button>
+                            <button id="import-data"><i class="fas fa-file-import"></i> Import Data</button>
+                            <input type="file" id="import-file" style="display: none">
+                        </div>
+                        <div class="storage-info">
+                            <p><i class="fas fa-info-circle"></i> Your data is stored in JSON files located in:</p>
+                            <p class="storage-path">./data/</p>
+                            <p>Files are automatically saved to your computer when you add, edit, or delete records.</p>
+                            <p>The data files can be committed to your GitHub repository for version control.</p>
+                            <p>Only personal export files are excluded from Git tracking.</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>&copy; 2023 Sri Lanka School Management System | Professional Edition</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# Only exclude personal exports but keep default empty data files
+/data/export_*.json
+
+# Dependencies
+/node_modules
+/package-lock.json
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
