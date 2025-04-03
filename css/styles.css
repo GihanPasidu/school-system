@@ -370,6 +370,28 @@ main {
     display: flex;
     gap: 10px;
     align-items: center;
+    flex-wrap: wrap;
+}
+
+.action-buttons input[type="text"],
+.action-buttons select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+.action-buttons input[type="text"] {
+    width: 250px;
+    flex: 1;
+    min-width: 150px;
+}
+
+.action-buttons select {
+    min-width: 120px;
+}
+
+.action-buttons button {
+    white-space: nowrap;
 }
 
 button {
@@ -463,14 +485,41 @@ table tr:hover {
 .action-icon {
     margin: 0 5px;
     background: none;
-    padding: 5px;
+    padding: 5px 10px;
     font-size: 14px;
     border-radius: 4px;
     transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.action-icon i {
+    font-size: 14px;
 }
 
 .action-icon:hover {
-    transform: scale(1.15);
+    transform: translateY(-2px);
+}
+
+.action-icon.edit {
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.action-icon.edit:hover {
+    color: white;
+    background-color: var(--primary-color);
+}
+
+.action-icon.delete {
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+}
+
+.action-icon.delete:hover {
+    color: white;
+    background-color: var(--danger-color);
 }
 
 .action-icon.edit {
@@ -926,6 +975,23 @@ footer p {
     
     .dashboard-stats {
         grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .action-buttons input[type="text"],
+    .action-buttons select,
+    .action-buttons button {
+        width: 100%;
+    }
+
+    .action-icon {
+        width: 100%;
+        margin: 2px 0;
+        justify-content: center;
     }
 }
 

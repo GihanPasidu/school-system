@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cancel-student').addEventListener('click', hideStudentForm);
     document.getElementById('student-form').addEventListener('submit', saveStudent);
     document.getElementById('student-search').addEventListener('input', searchStudents);
+    document.getElementById('grade-filter').addEventListener('change', filterStudentsByGrade);
 
     // Teachers management
     document.getElementById('add-teacher-btn').addEventListener('click', showTeacherForm);
@@ -166,16 +167,37 @@ async function loadStudents() {
         showLoading('Loading students...');
         
         const students = await schoolDB.getAll('students');
+        const gradeFilter = document.getElementById('grade-filter').value;
+        const searchValue = document.getElementById('student-search').value;
+        
+        let filteredStudents = students;
+        
+        // Apply grade filter if selected
+        if (gradeFilter) {
+            filteredStudents = filteredStudents.filter(student => 
+                student.grade === gradeFilter
+            );
+        }
+        
+        // Apply search filter if there's a search value
+        if (searchValue) {
+            const searchLower = searchValue.toLowerCase();
+            filteredStudents = filteredStudents.filter(student => 
+                student.name.toLowerCase().includes(searchLower) || 
+                student.admission.toLowerCase().includes(searchLower)
+            );
+        }
+        
         const studentsList = document.getElementById('students-list');
         studentsList.innerHTML = '';
         
-        if (students.length === 0) {
+        if (filteredStudents.length === 0) {
             studentsList.innerHTML = '<tr><td colspan="5" style="text-align: center;">No students found</td></tr>';
             hideLoading();
             return;
         }
         
-        students.forEach((student, index) => {
+        filteredStudents.forEach((student, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${student.admission}</td>
@@ -183,8 +205,8 @@ async function loadStudents() {
                 <td>Grade ${student.grade}</td>
                 <td>${student.contact || 'N/A'}</td>
                 <td>
-                    <button onclick="editStudent(${student.id})" class="action-icon edit"><i class="fas fa-edit"></i></button>
-                    <button onclick="deleteStudent(${student.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i></button>
+                    <button onclick="editStudent(${student.id})" class="action-icon edit"><i class="fas fa-edit"></i> Edit</button>
+                    <button onclick="deleteStudent(${student.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i> Delete</button>
                 </td>
             `;
             
@@ -281,33 +303,19 @@ async function deleteStudent(id) {
 }
 
 async function searchStudents() {
-    const searchValue = document.getElementById('student-search').value;
-    if (!searchValue.trim()) {
-        await loadStudents();
-        return;
-    }
+    // Instead of making a separate DB call, let's just use loadStudents
+    // which will respect both the search term and grade filter
+    await loadStudents();
+}
+
+// New function to filter students by grade
+async function filterStudentsByGrade() {
+    // Reuse the loadStudents function which handles both search and grade filters
+    await loadStudents();
     
-    try {
-        const results = await schoolDB.searchByField('students', 'name', searchValue);
-        const studentsList = document.getElementById('students-list');
-        studentsList.innerHTML = '';
-        
-        results.forEach(student => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${student.admission}</td>
-                <td>${student.name}</td>
-                <td>Grade ${student.grade}</td>
-                <td>${student.contact || 'N/A'}</td>
-                <td>
-                    <button onclick="editStudent(${student.id})" class="action-icon edit"><i class="fas fa-edit"></i></button>
-                    <button onclick="deleteStudent(${student.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i></button>
-                </td>
-            `;
-            studentsList.appendChild(row);
-        });
-    } catch (error) {
-        console.error('Error searching students:', error);
+    const gradeFilter = document.getElementById('grade-filter').value;
+    if (gradeFilter) {
+        showNotification(`Filtered to show Grade ${gradeFilter} students`);
     }
 }
 
@@ -334,8 +342,8 @@ async function loadTeachers() {
                 <td>${teacher.subject}</td>
                 <td>${teacher.contact}</td>
                 <td>
-                    <button onclick="editTeacher(${teacher.id})" class="action-icon edit"><i class="fas fa-edit"></i></button>
-                    <button onclick="deleteTeacher(${teacher.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i></button>
+                    <button onclick="editTeacher(${teacher.id})" class="action-icon edit"><i class="fas fa-edit"></i> Edit</button>
+                    <button onclick="deleteTeacher(${teacher.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i> Delete</button>
                 </td>
             `;
             
@@ -451,8 +459,8 @@ async function searchTeachers() {
                 <td>${teacher.subject}</td>
                 <td>${teacher.contact}</td>
                 <td>
-                    <button onclick="editTeacher(${teacher.id})" class="action-icon edit"><i class="fas fa-edit"></i></button>
-                    <button onclick="deleteTeacher(${teacher.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i></button>
+                    <button onclick="editTeacher(${teacher.id})" class="action-icon edit"><i class="fas fa-edit"></i> Edit</button>
+                    <button onclick="deleteTeacher(${teacher.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i> Delete</button>
                 </td>
             `;
             teachersList.appendChild(row);
@@ -606,3 +614,4 @@ window.deleteTeacher = deleteTeacher;
 window.showLoading = showLoading;
 window.hideLoading = hideLoading;
 window.stylizeCloudNextra = stylizeCloudNextra;
+window.filterStudentsByGrade = filterStudentsByGrade;
