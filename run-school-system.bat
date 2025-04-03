@@ -43,12 +43,11 @@ if not exist "data\settings.json" (
     echo [] > data\settings.json
 )
 
-:: Start the server and open the application
+:: Start the browser
 echo [INFO] Starting server...
-start "" node server.js
-timeout /t 3 /nobreak >nul
-echo [INFO] Opening application in browser...
 start "" http://localhost:3000
+echo.
+echo [INFO] Opening application in browser...
 echo.
 echo [SUCCESS] School Management System is now running!
 echo.
@@ -59,8 +58,15 @@ echo.
 echo IMPORTANT: Your data is stored in JSON files in the data directory
 echo          and can be committed to GitHub for version control.
 echo.
-echo Press any key to shut down the server when you're done...
-pause >nul
+
+:: Start Node.js server in a separate process
+start /B "" node server.js > nul 2>&1
+
+:: Wait for user to press a key to shutdown
+echo Press any key to shutdown the server when you're done...
+pause > nul
+
+:: Kill the Node.js server process
 taskkill /f /im node.exe >nul 2>nul
 echo.
 echo [INFO] Server stopped successfully. You can close this window.
