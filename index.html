@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sri Lanka School Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Add animation libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/db.js" defer></script>
@@ -12,6 +14,12 @@
     <script src="js/charts.js" defer></script>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div id="loading-message" class="loading-message">Loading...</div>
+    </div>
+
     <div class="container">
         <header>
             <h1><i class="fas fa-graduation-cap"></i> Sri Lanka School Management</h1>
@@ -282,7 +290,7 @@
         </div>
 
         <footer>
-            <p>&copy; 2023 Sri Lanka School Management System | Professional Edition</p>
+            <p>&copy; <span id="copyright-year">2023</span> CloudNextra Solutions | Sri Lanka School Management System</p>
         </footer>
     </div>
 </body>

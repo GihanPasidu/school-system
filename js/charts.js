@@ -35,7 +35,9 @@ function createGradeDistributionChart(students) {
     });
     
     const ctx = document.getElementById('gradeChart').getContext('2d');
-    new Chart(ctx, {
+    
+    // Create animated chart
+    const chart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: Object.keys(grades).map(grade => `Grade ${grade}`),
@@ -72,6 +74,10 @@ function createGradeDistributionChart(students) {
                         }
                     }
                 }
+            },
+            animation: {
+                duration: 2000,
+                easing: 'easeOutQuart'
             }
         }
     });
@@ -109,7 +115,9 @@ function createSubjectDistributionChart(teachers) {
     ];
     
     const ctx = document.getElementById('subjectChart').getContext('2d');
-    new Chart(ctx, {
+    
+    // Create animated chart
+    const chart = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: subjectNames,
@@ -136,6 +144,12 @@ function createSubjectDistributionChart(teachers) {
                         }
                     }
                 }
+            },
+            animation: {
+                animateRotate: true,
+                animateScale: true,
+                duration: 2000,
+                easing: 'easeOutQuart'
             }
         }
     });
@@ -156,7 +170,7 @@ function populateRecentAdmissions(students) {
         return;
     }
     
-    sortedStudents.forEach(student => {
+    sortedStudents.forEach((student, index) => {
         const row = document.createElement('tr');
         const admissionDate = new Date(student.dob || new Date());
         // Format date as YYYY-MM-DD
@@ -168,6 +182,10 @@ function populateRecentAdmissions(students) {
             <td>Grade ${student.grade}</td>
             <td>${formattedDate}</td>
         `;
+        
+        // Add staggered animation delay
+        row.style.animation = `slideUp 0.3s ${0.05 * index}s var(--animation-timing) both`;
+        
         recentStudentsList.appendChild(row);
     });
 }

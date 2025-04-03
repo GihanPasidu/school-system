@@ -1,8 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Show loading overlay
+    showLoading('Initializing system...');
+    
     // Initialize UI components after database is ready
     setTimeout(() => {
         initApp();
-    }, 500); // Give database time to initialize
+        hideLoading();
+    }, 1000); // Give database time to initialize
 
     // Navigation
     document.querySelectorAll('nav button').forEach(button => {
@@ -31,7 +35,61 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('import-file').click();
     });
     document.getElementById('import-file').addEventListener('change', importData);
+    
+    // Update copyright year
+    document.getElementById('copyright-year').textContent = new Date().getFullYear();
+    
+    // Add CloudNextra branding animation
+    stylizeCloudNextra();
 });
+
+// Add CloudNextra branding animation
+function stylizeCloudNextra() {
+    // Find all copyright texts and enhance CloudNextra
+    document.querySelectorAll('footer p').forEach(element => {
+        if (element.textContent.includes('CloudNextra')) {
+            const text = element.innerHTML;
+            const enhancedText = text.replace('CloudNextra Solutions', '<span class="cloudnextra-logo">CloudNextra Solutions</span>');
+            element.innerHTML = enhancedText;
+        }
+    });
+}
+
+// Show loading overlay
+function showLoading(message = 'Loading...') {
+    let loadingOverlay = document.getElementById('loading-overlay');
+    
+    if (!loadingOverlay) {
+        loadingOverlay = document.createElement('div');
+        loadingOverlay.id = 'loading-overlay';
+        loadingOverlay.className = 'loading-overlay';
+        
+        const spinner = document.createElement('div');
+        spinner.className = 'loading-spinner';
+        
+        const msg = document.createElement('div');
+        msg.className = 'loading-message';
+        msg.id = 'loading-message';
+        
+        loadingOverlay.appendChild(spinner);
+        loadingOverlay.appendChild(msg);
+        document.body.appendChild(loadingOverlay);
+    }
+    
+    document.getElementById('loading-message').textContent = message;
+    
+    // Force reflow to ensure the transition applies
+    loadingOverlay.offsetWidth;
+    loadingOverlay.classList.add('active');
+}
+
+// Hide loading overlay
+function hideLoading() {
+    const loadingOverlay = document.getElementById('loading-overlay');
+    if (loadingOverlay) {
+        loadingOverlay.classList.remove('active');
+    }
+}
 
 // Initialize application
 async function initApp() {
@@ -71,36 +129,53 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Navigation function
+// Navigation function with animation
 function navigateTo(pageId) {
-    // Hide all pages
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-    });
+    showLoading(`Loading ${pageId}...`);
     
-    // Show selected page
-    document.getElementById(pageId).classList.add('active');
-    
-    // Update active button
-    document.querySelectorAll('nav button').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    document.getElementById(`${pageId}-btn`).classList.add('active');
+    setTimeout(() => {
+        // Hide all pages
+        document.querySelectorAll('.page').forEach(page => {
+            page.classList.remove('active');
+        });
+        
+        // Show selected page
+        document.getElementById(pageId).classList.add('active');
+        
+        // Update active button
+        document.querySelectorAll('nav button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.getElementById(`${pageId}-btn`).classList.add('active');
+        
+        hideLoading();
+    }, 300);
+}
+
+// Apply highlight animation to an element
+function highlightElement(element) {
+    element.classList.add('item-highlight');
+    setTimeout(() => {
+        element.classList.remove('item-highlight');
+    }, 1000);
 }
 
 // Student management functions
 async function loadStudents() {
     try {
+        showLoading('Loading students...');
+        
         const students = await schoolDB.getAll('students');
         const studentsList = document.getElementById('students-list');
         studentsList.innerHTML = '';
         
         if (students.length === 0) {
             studentsList.innerHTML = '<tr><td colspan="5" style="text-align: center;">No students found</td></tr>';
+            hideLoading();
             return;
         }
         
-        students.forEach(student => {
+        students.forEach((student, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${student.admission}</td>
@@ -112,11 +187,18 @@ async function loadStudents() {
                     <button onclick="deleteStudent(${student.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i></button>
                 </td>
             `;
+            
+            // Add staggered animation delay
+            row.style.animation = `slideUp 0.4s ${0.05 * index}s var(--animation-timing) both`;
+            
             studentsList.appendChild(row);
         });
+        
+        hideLoading();
     } catch (error) {
         console.error('Error loading students:', error);
         showNotification('Failed to load students. Please try again.', 'error');
+        hideLoading();
     }
 }
 
@@ -229,19 +311,22 @@ async function searchStudents() {
     }
 }
 
-// Teacher management functions
+// Teacher management functions with animations
 async function loadTeachers() {
     try {
+        showLoading('Loading teachers...');
+        
         const teachers = await schoolDB.getAll('teachers');
         const teachersList = document.getElementById('teachers-list');
         teachersList.innerHTML = '';
         
         if (teachers.length === 0) {
             teachersList.innerHTML = '<tr><td colspan="5" style="text-align: center;">No teachers found</td></tr>';
+            hideLoading();
             return;
         }
         
-        teachers.forEach(teacher => {
+        teachers.forEach((teacher, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${teacher.empId}</td>
@@ -253,11 +338,18 @@ async function loadTeachers() {
                     <button onclick="deleteTeacher(${teacher.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i></button>
                 </td>
             `;
+            
+            // Add staggered animation delay
+            row.style.animation = `slideUp 0.4s ${0.05 * index}s var(--animation-timing) both`;
+            
             teachersList.appendChild(row);
         });
+        
+        hideLoading();
     } catch (error) {
         console.error('Error loading teachers:', error);
         showNotification('Failed to load teachers. Please try again.', 'error');
+        hideLoading();
     }
 }
 
@@ -370,7 +462,7 @@ async function searchTeachers() {
     }
 }
 
-// Settings functions
+// Settings functions with loading animations
 async function loadSettings() {
     try {
         const settings = await schoolDB.getAll('settings');
@@ -392,6 +484,8 @@ async function loadSettings() {
 async function saveSettings(event) {
     event.preventDefault();
     
+    showLoading('Saving settings...');
+    
     const schoolSettings = {
         id: 'schoolInfo',
         name: document.getElementById('setting-school-name').value,
@@ -403,37 +497,80 @@ async function saveSettings(event) {
         await schoolDB.update('settings', schoolSettings);
         document.getElementById('schoolName').textContent = schoolSettings.name || 'School Management';
         document.getElementById('schoolAddress').textContent = schoolSettings.address || 'Offline System';
+        
+        // Highlight the updated elements
+        highlightElement(document.getElementById('schoolName'));
+        highlightElement(document.getElementById('schoolAddress'));
+        
+        hideLoading();
         showNotification('Settings saved successfully!');
     } catch (error) {
         console.error('Error saving settings:', error);
+        hideLoading();
         showNotification('Failed to save settings. Please try again.', 'error');
     }
 }
 
-// Dashboard functions
+// Dashboard functions with animations
 async function updateDashboard() {
     try {
         const students = await schoolDB.getAll('students');
         const teachers = await schoolDB.getAll('teachers');
         
-        document.getElementById('student-count').textContent = students.length;
-        document.getElementById('teacher-count').textContent = teachers.length;
+        // Animate number counting
+        animateCounter('student-count', 0, students.length, 1000);
+        animateCounter('teacher-count', 0, teachers.length, 1000);
         
         // Update student-teacher ratio
         const ratio = teachers.length > 0 ? (students.length / teachers.length).toFixed(1) : 'N/A';
         document.getElementById('ratio').textContent = teachers.length > 0 ? `${ratio}:1` : 'N/A';
+        
+        // Highlight the updated elements
+        highlightElement(document.getElementById('ratio'));
     } catch (error) {
         console.error('Error updating dashboard:', error);
     }
 }
 
-// Data import/export functions
+// Animate counter from start to end value
+function animateCounter(elementId, start, end, duration) {
+    const element = document.getElementById(elementId);
+    const range = end - start;
+    const minTimer = 50; // minimum timer interval
+    let stepTime = Math.abs(Math.floor(duration / range));
+    
+    // Clamp step time
+    stepTime = Math.max(stepTime, minTimer);
+    
+    let startTime = new Date().getTime();
+    let endTime = startTime + duration;
+    let timer;
+    
+    function run() {
+        let now = new Date().getTime();
+        let remaining = Math.max((endTime - now) / duration, 0);
+        let value = Math.round(end - (remaining * range));
+        element.textContent = value;
+        
+        if (value == end) {
+            clearInterval(timer);
+        }
+    }
+    
+    timer = setInterval(run, stepTime);
+    run();
+}
+
+// Data import/export functions with loading animations
 async function exportData() {
     try {
+        showLoading('Exporting data...');
         await schoolDB.exportData();
+        hideLoading();
         showNotification('Data exported successfully! The file has been downloaded to your computer.');
     } catch (error) {
         console.error('Error exporting data:', error);
+        hideLoading();
         showNotification('Failed to export data. Please try again.', 'error');
     }
 }
@@ -442,15 +579,19 @@ async function importData(event) {
     const file = event.target.files[0];
     if (!file) return;
     
+    showLoading('Importing data...');
+    
     const reader = new FileReader();
     reader.onload = async function(e) {
         try {
             const data = JSON.parse(e.target.result);
             await schoolDB.importData(data);
             await initApp();
+            hideLoading();
             showNotification('Data imported successfully!');
         } catch (error) {
             console.error('Error importing data:', error);
+            hideLoading();
             showNotification('Failed to import data. Please ensure the file format is correct.', 'error');
         }
     };
@@ -462,3 +603,6 @@ window.editStudent = editStudent;
 window.deleteStudent = deleteStudent;
 window.editTeacher = editTeacher;
 window.deleteTeacher = deleteTeacher;
+window.showLoading = showLoading;
+window.hideLoading = hideLoading;
+window.stylizeCloudNextra = stylizeCloudNextra;

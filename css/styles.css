@@ -17,6 +17,8 @@
     --border-color: #dadce0;
     --card-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
     --hover-shadow: 0 4px 8px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 0 rgba(60, 64, 67, 0.15);
+    --transition-speed: 0.3s;
+    --animation-timing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -25,6 +27,7 @@ body {
     background-color: #f5f5f5;
     color: var(--dark-color);
     line-height: 1.6;
+    transition: background-color 0.5s ease;
 }
 
 .container {
@@ -36,6 +39,7 @@ body {
     box-shadow: var(--card-shadow);
     display: flex;
     flex-direction: column;
+    animation: fadeIn 0.5s var(--animation-timing);
 }
 
 /* Header */
@@ -49,12 +53,19 @@ header {
     position: sticky;
     top: 0;
     z-index: 100;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    animation: slideDown 0.5s var(--animation-timing);
 }
 
 header h1 {
     color: var(--primary-color);
     font-size: 24px;
     font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+header h1 i {
+    animation: spin 2s ease-in-out;
 }
 
 .school-details {
@@ -105,12 +116,14 @@ nav button {
     padding: 12px 25px;
     cursor: pointer;
     font-size: 15px;
-    transition: all 0.3s;
+    transition: all var(--transition-speed) var(--animation-timing);
     width: 100%;
     text-align: left;
     border-radius: 0 25px 25px 0;
     display: flex;
     align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
 nav button i {
@@ -118,17 +131,34 @@ nav button i {
     font-size: 18px;
     width: 24px;
     text-align: center;
+    transition: transform 0.3s ease;
+}
+
+nav button:hover i {
+    transform: scale(1.2);
 }
 
 nav button:hover {
     background-color: rgba(26, 115, 232, 0.08);
     color: var(--primary-color);
+    transform: translateX(5px);
 }
 
 nav button.active {
     background-color: rgba(26, 115, 232, 0.12);
     color: var(--primary-color);
     font-weight: 500;
+}
+
+nav button.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-color);
+    animation: widthGrow 0.3s var(--animation-timing);
 }
 
 /* Main content area */
@@ -148,6 +178,7 @@ main {
 
 .page.active {
     display: block;
+    animation: slideUp 0.4s var(--animation-timing);
 }
 
 @keyframes fadeIn {
@@ -155,11 +186,74 @@ main {
     to { opacity: 1; }
 }
 
+@keyframes slideUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes slideDown {
+    from { 
+        opacity: 0; 
+        transform: translateY(-20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes widthGrow {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(360deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -468px 0; }
+    100% { background-position: 468px 0; }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
 .page h2 {
     color: var(--dark-color);
     font-size: 22px;
     margin-bottom: 20px;
     font-weight: 500;
+    position: relative;
+    display: inline-block;
+}
+
+.page h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background-color: var(--primary-color);
+    animation: widthGrow 0.5s var(--animation-timing);
 }
 
 /* Cards and stats */
@@ -175,16 +269,27 @@ main {
     padding: 20px;
     border-radius: 8px;
     box-shadow: var(--card-shadow);
-    transition: box-shadow 0.3s;
+    transition: all 0.3s var(--animation-timing);
     border-top: 3px solid var(--primary-color);
+}
+
+.stat-card:nth-child(1) {
+    animation: slideUp 0.4s var(--animation-timing);
 }
 
 .stat-card:nth-child(2) {
     border-top-color: var(--secondary-color);
+    animation: slideUp 0.6s var(--animation-timing);
+}
+
+.stat-card:nth-child(3) {
+    border-top-color: var(--warning-color);
+    animation: slideUp 0.8s var(--animation-timing);
 }
 
 .stat-card:hover {
     box-shadow: var(--hover-shadow);
+    transform: translateY(-5px);
 }
 
 .stat-card h3 {
@@ -199,6 +304,7 @@ main {
     font-weight: 600;
     color: var(--dark-color);
     margin: 0;
+    transition: color 0.3s ease;
 }
 
 /* Chart containers */
@@ -214,19 +320,20 @@ main {
     padding: 20px;
     border-radius: 8px;
     box-shadow: var(--card-shadow);
-    transition: box-shadow 0.3s;
+    transition: all 0.3s var(--animation-timing);
 }
 
-.chart-card h3 {
-    color: var(--dark-color);
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 15px;
+.chart-card:nth-child(1) {
+    animation: slideUp 0.5s var(--animation-timing);
 }
 
-.chart-container {
-    height: 300px;
-    position: relative;
+.chart-card:nth-child(2) {
+    animation: slideUp 0.7s var(--animation-timing);
+}
+
+.chart-card:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(-3px);
 }
 
 /* Tables */
@@ -236,6 +343,12 @@ main {
     box-shadow: var(--card-shadow);
     overflow: hidden;
     margin-bottom: 30px;
+    transition: all 0.3s var(--animation-timing);
+    animation: slideUp 0.6s var(--animation-timing);
+}
+
+.data-container:hover {
+    box-shadow: var(--hover-shadow);
 }
 
 .data-header {
@@ -266,15 +379,43 @@ button {
     padding: 8px 16px;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.2s var(--animation-timing);
     font-size: 14px;
     display: flex;
     align-items: center;
     gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.3);
+    opacity: 0;
+    border-radius: 100%;
+    transform: translate(-50%, -50%) scale(1);
+    transition: all 0.5s var(--animation-timing);
+}
+
+button:active::after {
+    width: 100%;
+    height: 300px;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
 }
 
 button:hover {
     background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(1px);
 }
 
 button i {
@@ -310,8 +451,13 @@ table tr:last-child td {
     border-bottom: none;
 }
 
+table tr {
+    transition: all 0.2s ease;
+}
+
 table tr:hover {
     background-color: rgba(26, 115, 232, 0.04);
+    transform: translateX(3px);
 }
 
 .action-icon {
@@ -320,14 +466,27 @@ table tr:hover {
     padding: 5px;
     font-size: 14px;
     border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.action-icon:hover {
+    transform: scale(1.15);
 }
 
 .action-icon.edit {
     color: var(--primary-color);
 }
 
+.action-icon.edit:hover {
+    color: var(--primary-dark);
+}
+
 .action-icon.delete {
     color: var(--danger-color);
+}
+
+.action-icon.delete:hover {
+    color: #d32f2f;
 }
 
 /* Forms */
@@ -338,6 +497,8 @@ table tr:hover {
     margin-bottom: 25px;
     box-shadow: var(--card-shadow);
     border-left: 4px solid var(--primary-color);
+    transition: all 0.3s var(--animation-timing);
+    animation: slideDown 0.4s var(--animation-timing);
 }
 
 .data-form h3 {
@@ -375,7 +536,7 @@ select {
     border-radius: 4px;
     width: 100%;
     font-size: 15px;
-    transition: border-color 0.3s;
+    transition: all 0.3s ease;
 }
 
 input:focus,
@@ -383,6 +544,7 @@ select:focus {
     border-color: var(--primary-color);
     outline: none;
     box-shadow: 0 0 0 1px rgba(26, 115, 232, 0.5);
+    animation: pulse 1s ease;
 }
 
 .form-actions {
@@ -398,6 +560,8 @@ select:focus {
     border-radius: 8px;
     margin-bottom: 25px;
     box-shadow: var(--card-shadow);
+    transition: all 0.3s var(--animation-timing);
+    animation: slideUp 0.5s var(--animation-timing);
 }
 
 .settings-card h3 {
@@ -405,6 +569,10 @@ select:focus {
     font-size: 18px;
     font-weight: 500;
     margin-bottom: 20px;
+}
+
+.settings-card:hover {
+    box-shadow: var(--hover-shadow);
 }
 
 .data-management {
@@ -454,6 +622,18 @@ select:focus {
     align-items: center;
     gap: 10px;
     transform: translateX(0);
+    animation: slideIn 0.5s var(--animation-timing);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .success-message.fadeout {
@@ -483,6 +663,62 @@ select:focus {
     background-color: #e9ecef;
     padding: 2px 5px;
     border-radius: 3px;
+}
+
+/* Loading Spinner */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.loading-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(26, 115, 232, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+}
+
+.loading-message {
+    margin-top: 20px;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* Shimmer Loading Effect */
+.shimmer {
+    background: #f6f7f8;
+    background-image: linear-gradient(
+        to right, 
+        #f6f7f8 0%, 
+        #edeef1 20%, 
+        #f6f7f8 40%, 
+        #f6f7f8 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 800px 104px;
+    display: inline-block;
+    position: relative;
+    animation: shimmer 1.5s infinite linear;
 }
 
 /* Pagination */
@@ -526,6 +762,111 @@ footer {
     border-top: 1px solid var(--border-color);
     font-size: 14px;
     background-color: white;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--warning-color), var(--danger-color));
+}
+
+footer p {
+    position: relative;
+    display: inline-block;
+}
+
+/* Professional active animation */
+.item-highlight {
+    animation: pulse 0.5s ease;
+}
+
+/* Add CloudNextra logo animation */
+.cloudnextra-logo {
+    font-weight: bold;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: gradient 3s ease infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Add icon animations */
+.icon-animate {
+    animation: bounce 2s infinite;
+}
+
+/* Alert/message box animation */
+.alert-box {
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 5px;
+    animation: slideUp 0.4s var(--animation-timing);
+    position: relative;
+    overflow: hidden;
+}
+
+.alert-box::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+}
+
+.alert-info {
+    background-color: rgba(26, 115, 232, 0.1);
+    color: var(--primary-dark);
+}
+
+.alert-info::before {
+    background-color: var(--primary-color);
+}
+
+.alert-success {
+    background-color: rgba(52, 168, 83, 0.1);
+    color: var(--secondary-color);
+}
+
+.alert-success::before {
+    background-color: var(--secondary-color);
+}
+
+.alert-warning {
+    background-color: rgba(251, 188, 5, 0.1);
+    color: var(--warning-color);
+}
+
+.alert-warning::before {
+    background-color: var(--warning-color);
+}
+
+.alert-danger {
+    background-color: rgba(234, 67, 53, 0.1);
+    color: var(--danger-color);
+}
+
+.alert-danger::before {
+    background-color: var(--danger-color);
 }
 
 /* Responsive */

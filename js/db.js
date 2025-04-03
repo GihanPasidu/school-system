@@ -188,7 +188,12 @@ class SchoolDatabase {
             const allData = {
                 students: this.data.students,
                 teachers: this.data.teachers,
-                settings: this.data.settings
+                settings: this.data.settings,
+                metadata: {
+                    exportDate: new Date().toISOString(),
+                    version: '1.0',
+                    provider: 'CloudNextra Solutions'
+                }
             };
             
             // Save as a single export file

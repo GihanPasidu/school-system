@@ -11,6 +11,7 @@ An offline school management system designed specifically for Sri Lankan schools
 - **Data Management**: Import and export data for backup purposes
 - **Version Control**: Store your default data structure in GitHub for easy deployment
 - **Local Storage**: All active data is stored in JSON files in a local folder
+- **Professional Animations**: Smooth transitions and animations throughout the interface
 
 ## Setup
 
@@ -101,4 +102,8 @@ This allows for:
 - Uses local JSON files for data storage
 - No external database required
 - All data remains on the local computer
+
+## Credits
+
+Developed by CloudNextra Solutions - Professional Education Management Systems
 
