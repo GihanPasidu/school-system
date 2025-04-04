@@ -159,8 +159,17 @@ function populateRecentAdmissions(students) {
     const recentStudentsList = document.getElementById('recent-students-list');
     if (!recentStudentsList) return;
     
-    // Sort by ID (assuming newer students have higher IDs)
-    const sortedStudents = [...students].sort((a, b) => b.id - a.id).slice(0, 5);
+    // Sort by enrollment date (if available) or ID
+    const sortedStudents = [...students].sort((a, b) => {
+        if (a.enrollmentDate && b.enrollmentDate) {
+            return new Date(b.enrollmentDate) - new Date(a.enrollmentDate);
+        }
+        
+        // Compare IDs safely, handling string-based IDs
+        const aIdNum = a.id && a.id.toString().replace(/\D/g, '');
+        const bIdNum = b.id && b.id.toString().replace(/\D/g, '');
+        return parseInt(bIdNum) - parseInt(aIdNum);
+    }).slice(0, 5);
     
     recentStudentsList.innerHTML = '';
     if (sortedStudents.length === 0) {
@@ -172,13 +181,13 @@ function populateRecentAdmissions(students) {
     
     sortedStudents.forEach((student, index) => {
         const row = document.createElement('tr');
-        const admissionDate = new Date(student.dob || new Date());
+        const enrollmentDate = new Date(student.enrollmentDate || new Date());
         // Format date as YYYY-MM-DD
-        const formattedDate = admissionDate.toISOString().split('T')[0];
+        const formattedDate = enrollmentDate.toISOString().split('T')[0];
         
         row.innerHTML = `
-            <td>${student.admission}</td>
-            <td>${student.name}</td>
+            <td>${student.id}</td>
+            <td>${student.firstName} ${student.lastName}</td>
             <td>Grade ${student.grade}</td>
             <td>${formattedDate}</td>
         `;
@@ -207,6 +216,65 @@ function updateStudentTeacherRatio(students, teachers) {
     const formattedRatio = ratio.toFixed(1);
     
     ratioElement.textContent = `${formattedRatio}:1`;
+}
+
+function renderStudentMarks(marks) {
+    if (!marks || marks.length === 0) {
+        return `<div class="no-marks">No marks recorded for this student yet.</div>`;
+    }
+    
+    // Group marks by term/period
+    const marksByTerm = {};
+    marks.forEach(mark => {
+        if (!marksByTerm[mark.term]) {
+            marksByTerm[mark.term] = [];
+        }
+        marksByTerm[mark.term].push(mark);
+    });
+    
+    let html = '';
+    
+    // Render marks by term
+    for (const [term, termMarks] of Object.entries(marksByTerm)) {
+        html += `
+            <div class="marks-term">
+                <h4>${term}</h4>
+                <div class="marks-table-wrapper">
+                    <table class="marks-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Grade</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+        
+        termMarks.forEach(mark => {
+            html += `
+                <tr>
+                    <td>${mark.subject}</td>
+                    <td>${mark.score}/100</td>
+                    <td><span class="grade-badge grade-${mark.grade.charAt(0).toLowerCase()}">${mark.grade}</span></td>
+                    <td>
+                        <button onclick="editMarks('${mark.id}')" class="action-icon edit small"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteMarks('${mark.id}')" class="action-icon delete small"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        html += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+    }
+    
+    return html;
 }
 
 // Re-initialize charts when dashboard is shown

@@ -1,20 +1,1477 @@
 [
   {
-    "name": "erynsnuyrt isnr6is 6iusr",
-    "admission": "7527817862",
-    "dob": "2025-01-15",
-    "grade": "12",
-    "contact": "75836873+87",
-    "address": "SEERZNJTERYSMRTUR",
-    "id": 1
+    "id": "S1001",
+    "firstName": "Emma",
+    "lastName": "Johnson",
+    "gender": "Female",
+    "age": 6,
+    "grade": 1,
+    "section": "A",
+    "dateOfBirth": "2018-05-12",
+    "address": "123 Maple Street, Springfield",
+    "parentInfo": {
+      "fatherName": "Michael Johnson",
+      "motherName": "Sarah Johnson",
+      "phone": "555-123-4567",
+      "email": "johnson.family@email.com"
+    },
+    "emergencyContact": "555-765-4321",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "A+"
+    },
+    "enrollmentDate": "2023-09-01"
   },
   {
-    "name": "WVRwrvqwV",
-    "admission": "4675473572",
-    "dob": "2025-01-01",
-    "grade": "11",
-    "contact": "573573573",
-    "address": "rabevtvwetbaweat",
-    "id": 2
+    "id": "S1002",
+    "firstName": "Noah",
+    "lastName": "Williams",
+    "gender": "Male",
+    "age": 6,
+    "grade": 1,
+    "section": "A",
+    "dateOfBirth": "2018-03-24",
+    "address": "456 Oak Avenue, Springfield",
+    "parentInfo": {
+      "fatherName": "Daniel Williams",
+      "motherName": "Emily Williams",
+      "phone": "555-234-5678",
+      "email": "williams.family@email.com"
+    },
+    "emergencyContact": "555-876-5432",
+    "medicalInfo": {
+      "allergies": [
+        "Peanuts"
+      ],
+      "bloodGroup": "O+"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1003",
+    "firstName": "Olivia",
+    "lastName": "Brown",
+    "gender": "Female",
+    "age": 6,
+    "grade": 1,
+    "section": "A",
+    "dateOfBirth": "2018-07-15",
+    "address": "789 Pine Road, Springfield",
+    "parentInfo": {
+      "fatherName": "David Brown",
+      "motherName": "Jennifer Brown",
+      "phone": "555-345-6789",
+      "email": "brown.family@email.com"
+    },
+    "emergencyContact": "555-987-6543",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "B+"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1005",
+    "firstName": "Ava",
+    "lastName": "Miller",
+    "gender": "Female",
+    "age": 6,
+    "grade": 1,
+    "section": "B",
+    "dateOfBirth": "2018-01-05",
+    "address": "202 Birch Street, Springfield",
+    "parentInfo": {
+      "fatherName": "James Miller",
+      "motherName": "Linda Miller",
+      "phone": "555-567-8901",
+      "email": "miller.family@email.com"
+    },
+    "emergencyContact": "555-109-8765",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "A-"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1006",
+    "firstName": "Ethan",
+    "lastName": "Davis",
+    "gender": "Male",
+    "age": 6,
+    "grade": 1,
+    "section": "B",
+    "dateOfBirth": "2018-04-18",
+    "address": "303 Elm Court, Springfield",
+    "parentInfo": {
+      "fatherName": "Thomas Davis",
+      "motherName": "Susan Davis",
+      "phone": "555-678-9012",
+      "email": "davis.family@email.com"
+    },
+    "emergencyContact": "555-210-9876",
+    "medicalInfo": {
+      "allergies": [
+        "Milk"
+      ],
+      "bloodGroup": "O-"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1007",
+    "firstName": "Sophia",
+    "lastName": "Wilson",
+    "gender": "Female",
+    "age": 6,
+    "grade": 1,
+    "section": "B",
+    "dateOfBirth": "2018-06-22",
+    "address": "404 Spruce Drive, Springfield",
+    "parentInfo": {
+      "fatherName": "Richard Wilson",
+      "motherName": "Elizabeth Wilson",
+      "phone": "555-789-0123",
+      "email": "wilson.family@email.com"
+    },
+    "emergencyContact": "555-321-0987",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "B-"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1008",
+    "firstName": "Mason",
+    "lastName": "Moore",
+    "gender": "Male",
+    "age": 7,
+    "grade": 1,
+    "section": "B",
+    "dateOfBirth": "2017-12-14",
+    "address": "505 Willow Way, Springfield",
+    "parentInfo": {
+      "fatherName": "Joseph Moore",
+      "motherName": "Mary Moore",
+      "phone": "555-890-1234",
+      "email": "moore.family@email.com"
+    },
+    "emergencyContact": "555-432-1098",
+    "medicalInfo": {
+      "allergies": [
+        "Eggs"
+      ],
+      "bloodGroup": "AB-"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1009",
+    "firstName": "Isabella",
+    "lastName": "Taylor",
+    "gender": "Female",
+    "age": 6,
+    "grade": 1,
+    "section": "C",
+    "dateOfBirth": "2018-02-28",
+    "address": "606 Aspen Avenue, Springfield",
+    "parentInfo": {
+      "fatherName": "Charles Taylor",
+      "motherName": "Margaret Taylor",
+      "phone": "555-901-2345",
+      "email": "taylor.family@email.com"
+    },
+    "emergencyContact": "555-543-2109",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "A+"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1010",
+    "firstName": "Logan",
+    "lastName": "Anderson",
+    "gender": "Male",
+    "age": 6,
+    "grade": 1,
+    "section": "C",
+    "dateOfBirth": "2018-08-10",
+    "address": "707 Redwood Road, Springfield",
+    "parentInfo": {
+      "fatherName": "William Anderson",
+      "motherName": "Barbara Anderson",
+      "phone": "555-012-3456",
+      "email": "anderson.family@email.com"
+    },
+    "emergencyContact": "555-654-3210",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "O+"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1011",
+    "firstName": "Mia",
+    "lastName": "Thomas",
+    "gender": "Female",
+    "age": 6,
+    "grade": 1,
+    "section": "C",
+    "dateOfBirth": "2018-05-05",
+    "address": "808 Magnolia Street, Springfield",
+    "parentInfo": {
+      "fatherName": "John Thomas",
+      "motherName": "Dorothy Thomas",
+      "phone": "555-123-4567",
+      "email": "thomas.family@email.com"
+    },
+    "emergencyContact": "555-765-4321",
+    "medicalInfo": {
+      "allergies": [
+        "Shellfish"
+      ],
+      "bloodGroup": "B+"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1012",
+    "firstName": "Lucas",
+    "lastName": "Jackson",
+    "gender": "Male",
+    "age": 7,
+    "grade": 1,
+    "section": "C",
+    "dateOfBirth": "2017-10-17",
+    "address": "909 Sycamore Lane, Springfield",
+    "parentInfo": {
+      "fatherName": "George Jackson",
+      "motherName": "Helen Jackson",
+      "phone": "555-234-5678",
+      "email": "jackson.family@email.com"
+    },
+    "emergencyContact": "555-876-5432",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "AB+"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1013",
+    "firstName": "Charlotte",
+    "lastName": "White",
+    "gender": "Female",
+    "age": 6,
+    "grade": 1,
+    "section": "D",
+    "dateOfBirth": "2018-03-12",
+    "address": "111 Dogwood Drive, Springfield",
+    "parentInfo": {
+      "fatherName": "Edward White",
+      "motherName": "Nancy White",
+      "phone": "555-345-6789",
+      "email": "white.family@email.com"
+    },
+    "emergencyContact": "555-987-6543",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "A-"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1014",
+    "firstName": "Oliver",
+    "lastName": "Harris",
+    "gender": "Male",
+    "age": 6,
+    "grade": 1,
+    "section": "D",
+    "dateOfBirth": "2018-07-25",
+    "address": "222 Forest Avenue, Springfield",
+    "parentInfo": {
+      "fatherName": "Ronald Harris",
+      "motherName": "Carol Harris",
+      "phone": "555-456-7890",
+      "email": "harris.family@email.com"
+    },
+    "emergencyContact": "555-098-7654",
+    "medicalInfo": {
+      "allergies": [
+        "Pollen"
+      ],
+      "bloodGroup": "O-"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1015",
+    "firstName": "Amelia",
+    "lastName": "Clark",
+    "gender": "Female",
+    "age": 6,
+    "grade": 1,
+    "section": "D",
+    "dateOfBirth": "2018-01-30",
+    "address": "333 Poplar Place, Springfield",
+    "parentInfo": {
+      "fatherName": "Kenneth Clark",
+      "motherName": "Ruth Clark",
+      "phone": "555-567-8901",
+      "email": "clark.family@email.com"
+    },
+    "emergencyContact": "555-109-8765",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "B-"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1016",
+    "firstName": "Henry",
+    "lastName": "Lewis",
+    "gender": "Male",
+    "age": 7,
+    "grade": 1,
+    "section": "D",
+    "dateOfBirth": "2017-12-05",
+    "address": "444 Cherry Circle, Springfield",
+    "parentInfo": {
+      "fatherName": "Steven Lewis",
+      "motherName": "Betty Lewis",
+      "phone": "555-678-9012",
+      "email": "lewis.family@email.com"
+    },
+    "emergencyContact": "555-210-9876",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "AB-"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1017",
+    "firstName": "Evelyn",
+    "lastName": "Walker",
+    "gender": "Female",
+    "age": 6,
+    "grade": 1,
+    "section": "E",
+    "dateOfBirth": "2018-06-18",
+    "address": "555 Juniper Street, Springfield",
+    "parentInfo": {
+      "fatherName": "Paul Walker",
+      "motherName": "Sandra Walker",
+      "phone": "555-789-0123",
+      "email": "walker.family@email.com"
+    },
+    "emergencyContact": "555-321-0987",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "A+"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1018",
+    "firstName": "William",
+    "lastName": "Hall",
+    "gender": "Male",
+    "age": 6,
+    "grade": 1,
+    "section": "E",
+    "dateOfBirth": "2018-04-09",
+    "address": "666 Walnut Way, Springfield",
+    "parentInfo": {
+      "fatherName": "Mark Hall",
+      "motherName": "Donna Hall",
+      "phone": "555-890-1234",
+      "email": "hall.family@email.com"
+    },
+    "emergencyContact": "555-432-1098",
+    "medicalInfo": {
+      "allergies": [
+        "Gluten"
+      ],
+      "bloodGroup": "O+"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1019",
+    "firstName": "Abigail",
+    "lastName": "Allen",
+    "gender": "Female",
+    "age": 6,
+    "grade": 1,
+    "section": "E",
+    "dateOfBirth": "2018-02-14",
+    "address": "777 Chestnut Road, Springfield",
+    "parentInfo": {
+      "fatherName": "Donald Allen",
+      "motherName": "Michelle Allen",
+      "phone": "555-901-2345",
+      "email": "allen.family@email.com"
+    },
+    "emergencyContact": "555-543-2109",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "B+"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S1020",
+    "firstName": "Benjamin",
+    "lastName": "Young",
+    "gender": "Male",
+    "age": 6,
+    "grade": 1,
+    "section": "E",
+    "dateOfBirth": "2018-09-22",
+    "address": "888 Hickory Avenue, Springfield",
+    "parentInfo": {
+      "fatherName": "Gary Young",
+      "motherName": "Laura Young",
+      "phone": "555-012-3456",
+      "email": "young.family@email.com"
+    },
+    "emergencyContact": "555-654-3210",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "AB+"
+    },
+    "enrollmentDate": "2023-09-01"
+  },
+  {
+    "id": "S5001",
+    "firstName": "Jacob",
+    "lastName": "Martinez",
+    "gender": "Male",
+    "age": 10,
+    "grade": 5,
+    "section": "A",
+    "dateOfBirth": "2014-03-18",
+    "address": "123 Oakwood Drive, Springfield",
+    "parentInfo": {
+      "fatherName": "Carlos Martinez",
+      "motherName": "Elena Martinez",
+      "phone": "555-123-7890",
+      "email": "martinez.family@email.com"
+    },
+    "emergencyContact": "555-765-7890",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "O+"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5002",
+    "firstName": "Sophia",
+    "lastName": "Garcia",
+    "gender": "Female",
+    "age": 10,
+    "grade": 5,
+    "section": "A",
+    "dateOfBirth": "2014-05-22",
+    "address": "245 Maple Court, Springfield",
+    "parentInfo": {
+      "fatherName": "Luis Garcia",
+      "motherName": "Maria Garcia",
+      "phone": "555-234-8901",
+      "email": "garcia.family@email.com"
+    },
+    "emergencyContact": "555-876-8901",
+    "medicalInfo": {
+      "allergies": [
+        "Peanuts"
+      ],
+      "bloodGroup": "A+"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5003",
+    "firstName": "Ethan",
+    "lastName": "Rodriguez",
+    "gender": "Male",
+    "age": 11,
+    "grade": 5,
+    "section": "A",
+    "dateOfBirth": "2013-11-04",
+    "address": "378 Pine Street, Springfield",
+    "parentInfo": {
+      "fatherName": "Miguel Rodriguez",
+      "motherName": "Ana Rodriguez",
+      "phone": "555-345-9012",
+      "email": "rodriguez.family@email.com"
+    },
+    "emergencyContact": "555-987-9012",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "B-"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5004",
+    "firstName": "Isabella",
+    "lastName": "Lee",
+    "gender": "Female",
+    "age": 10,
+    "grade": 5,
+    "section": "A",
+    "dateOfBirth": "2014-02-15",
+    "address": "492 Cedar Lane, Springfield",
+    "parentInfo": {
+      "fatherName": "David Lee",
+      "motherName": "Grace Lee",
+      "phone": "555-456-0123",
+      "email": "lee.family@email.com"
+    },
+    "emergencyContact": "555-098-0123",
+    "medicalInfo": {
+      "allergies": [
+        "Shellfish"
+      ],
+      "bloodGroup": "AB+"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5005",
+    "firstName": "Lucas",
+    "lastName": "Thompson",
+    "gender": "Male",
+    "age": 10,
+    "grade": 5,
+    "section": "B",
+    "dateOfBirth": "2014-07-30",
+    "address": "567 Birch Avenue, Springfield",
+    "parentInfo": {
+      "fatherName": "Andrew Thompson",
+      "motherName": "Rebecca Thompson",
+      "phone": "555-567-1234",
+      "email": "thompson.family@email.com"
+    },
+    "emergencyContact": "555-109-1234",
+    "medicalInfo": {
+      "allergies": [
+        "Dust"
+      ],
+      "bloodGroup": "O-"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5006",
+    "firstName": "Mia",
+    "lastName": "Patel",
+    "gender": "Female",
+    "age": 10,
+    "grade": 5,
+    "section": "B",
+    "dateOfBirth": "2014-09-12",
+    "address": "618 Elm Road, Springfield",
+    "parentInfo": {
+      "fatherName": "Raj Patel",
+      "motherName": "Priya Patel",
+      "phone": "555-678-2345",
+      "email": "patel.family@email.com"
+    },
+    "emergencyContact": "555-210-2345",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "A-"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5007",
+    "firstName": "Alexander",
+    "lastName": "Nguyen",
+    "gender": "Male",
+    "age": 11,
+    "grade": 5,
+    "section": "B",
+    "dateOfBirth": "2013-10-25",
+    "address": "729 Spruce Drive, Springfield",
+    "parentInfo": {
+      "fatherName": "Minh Nguyen",
+      "motherName": "Linh Nguyen",
+      "phone": "555-789-3456",
+      "email": "nguyen.family@email.com"
+    },
+    "emergencyContact": "555-321-3456",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "B+"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5008",
+    "firstName": "Sofia",
+    "lastName": "Kim",
+    "gender": "Female",
+    "age": 10,
+    "grade": 5,
+    "section": "B",
+    "dateOfBirth": "2014-04-07",
+    "address": "835 Willow Way, Springfield",
+    "parentInfo": {
+      "fatherName": "James Kim",
+      "motherName": "Yoon Kim",
+      "phone": "555-890-4567",
+      "email": "kim.family@email.com"
+    },
+    "emergencyContact": "555-432-4567",
+    "medicalInfo": {
+      "allergies": [
+        "Milk"
+      ],
+      "bloodGroup": "AB-"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5009",
+    "firstName": "Aiden",
+    "lastName": "Singh",
+    "gender": "Male",
+    "age": 10,
+    "grade": 5,
+    "section": "C",
+    "dateOfBirth": "2014-06-19",
+    "address": "947 Aspen Court, Springfield",
+    "parentInfo": {
+      "fatherName": "Arjun Singh",
+      "motherName": "Divya Singh",
+      "phone": "555-901-5678",
+      "email": "singh.family@email.com"
+    },
+    "emergencyContact": "555-543-5678",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "O+"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5010",
+    "firstName": "Emily",
+    "lastName": "Chen",
+    "gender": "Female",
+    "age": 10,
+    "grade": 5,
+    "section": "C",
+    "dateOfBirth": "2014-01-03",
+    "address": "1052 Redwood Circle, Springfield",
+    "parentInfo": {
+      "fatherName": "Wei Chen",
+      "motherName": "Lin Chen",
+      "phone": "555-012-6789",
+      "email": "chen.family@email.com"
+    },
+    "emergencyContact": "555-654-6789",
+    "medicalInfo": {
+      "allergies": [
+        "Eggs"
+      ],
+      "bloodGroup": "A+"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5011",
+    "firstName": "Mason",
+    "lastName": "Wright",
+    "gender": "Male",
+    "age": 11,
+    "grade": 5,
+    "section": "C",
+    "dateOfBirth": "2013-12-09",
+    "address": "1163 Magnolia Lane, Springfield",
+    "parentInfo": {
+      "fatherName": "Thomas Wright",
+      "motherName": "Karen Wright",
+      "phone": "555-123-7890",
+      "email": "wright.family@email.com"
+    },
+    "emergencyContact": "555-765-7890",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "B-"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5012",
+    "firstName": "Abigail",
+    "lastName": "Lopez",
+    "gender": "Female",
+    "age": 10,
+    "grade": 5,
+    "section": "C",
+    "dateOfBirth": "2014-08-22",
+    "address": "1274 Sycamore Avenue, Springfield",
+    "parentInfo": {
+      "fatherName": "Juan Lopez",
+      "motherName": "Isabella Lopez",
+      "phone": "555-234-8901",
+      "email": "lopez.family@email.com"
+    },
+    "emergencyContact": "555-876-8901",
+    "medicalInfo": {
+      "allergies": [
+        "Pollen"
+      ],
+      "bloodGroup": "O-"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5013",
+    "firstName": "Daniel",
+    "lastName": "Robinson",
+    "gender": "Male",
+    "age": 10,
+    "grade": 5,
+    "section": "D",
+    "dateOfBirth": "2014-05-17",
+    "address": "1385 Dogwood Street, Springfield",
+    "parentInfo": {
+      "fatherName": "Matthew Robinson",
+      "motherName": "Olivia Robinson",
+      "phone": "555-345-9012",
+      "email": "robinson.family@email.com"
+    },
+    "emergencyContact": "555-987-9012",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "AB+"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5014",
+    "firstName": "Chloe",
+    "lastName": "Scott",
+    "gender": "Female",
+    "age": 10,
+    "grade": 5,
+    "section": "D",
+    "dateOfBirth": "2014-03-29",
+    "address": "1496 Forest Drive, Springfield",
+    "parentInfo": {
+      "fatherName": "Brian Scott",
+      "motherName": "Jessica Scott",
+      "phone": "555-456-0123",
+      "email": "scott.family@email.com"
+    },
+    "emergencyContact": "555-098-0123",
+    "medicalInfo": {
+      "allergies": [
+        "Gluten"
+      ],
+      "bloodGroup": "A-"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5015",
+    "firstName": "Samuel",
+    "lastName": "Gonzalez",
+    "gender": "Male",
+    "age": 11,
+    "grade": 5,
+    "section": "D",
+    "dateOfBirth": "2013-09-10",
+    "address": "1507 Poplar Road, Springfield",
+    "parentInfo": {
+      "fatherName": "Antonio Gonzalez",
+      "motherName": "Carmen Gonzalez",
+      "phone": "555-567-1234",
+      "email": "gonzalez.family@email.com"
+    },
+    "emergencyContact": "555-109-1234",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "B+"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5016",
+    "firstName": "Victoria",
+    "lastName": "Turner",
+    "gender": "Female",
+    "age": 10,
+    "grade": 5,
+    "section": "D",
+    "dateOfBirth": "2014-07-05",
+    "address": "1618 Cherry Circle, Springfield",
+    "parentInfo": {
+      "fatherName": "Robert Turner",
+      "motherName": "Julia Turner",
+      "phone": "555-678-2345",
+      "email": "turner.family@email.com"
+    },
+    "emergencyContact": "555-210-2345",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "AB-"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5017",
+    "firstName": "Jayden",
+    "lastName": "Baker",
+    "gender": "Male",
+    "age": 10,
+    "grade": 5,
+    "section": "E",
+    "dateOfBirth": "2014-02-28",
+    "address": "1729 Juniper Lane, Springfield",
+    "parentInfo": {
+      "fatherName": "Christopher Baker",
+      "motherName": "Amanda Baker",
+      "phone": "555-789-3456",
+      "email": "baker.family@email.com"
+    },
+    "emergencyContact": "555-321-3456",
+    "medicalInfo": {
+      "allergies": [
+        "Nuts"
+      ],
+      "bloodGroup": "O+"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5018",
+    "firstName": "Lily",
+    "lastName": "Rivera",
+    "gender": "Female",
+    "age": 10,
+    "grade": 5,
+    "section": "E",
+    "dateOfBirth": "2014-04-14",
+    "address": "1830 Walnut Avenue, Springfield",
+    "parentInfo": {
+      "fatherName": "Jose Rivera",
+      "motherName": "Sofia Rivera",
+      "phone": "555-890-4567",
+      "email": "rivera.family@email.com"
+    },
+    "emergencyContact": "555-432-4567",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "A+"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5019",
+    "firstName": "Ryan",
+    "lastName": "Cooper",
+    "gender": "Male",
+    "age": 10,
+    "grade": 5,
+    "section": "E",
+    "dateOfBirth": "2014-08-09",
+    "address": "1941 Chestnut Street, Springfield",
+    "parentInfo": {
+      "fatherName": "Kevin Cooper",
+      "motherName": "Michelle Cooper",
+      "phone": "555-901-5678",
+      "email": "cooper.family@email.com"
+    },
+    "emergencyContact": "555-543-5678",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "B-"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S5020",
+    "firstName": "Hannah",
+    "lastName": "Peterson",
+    "gender": "Female",
+    "age": 11,
+    "grade": 5,
+    "section": "E",
+    "dateOfBirth": "2013-12-20",
+    "address": "2052 Hickory Drive, Springfield",
+    "parentInfo": {
+      "fatherName": "Steven Peterson",
+      "motherName": "Rachel Peterson",
+      "phone": "555-012-6789",
+      "email": "peterson.family@email.com"
+    },
+    "emergencyContact": "555-654-6789",
+    "medicalInfo": {
+      "allergies": [
+        "Dairy"
+      ],
+      "bloodGroup": "O-"
+    },
+    "enrollmentDate": "2019-09-01"
+  },
+  {
+    "id": "S12001",
+    "firstName": "Michael",
+    "lastName": "Johnson",
+    "gender": "Male",
+    "age": 17,
+    "grade": 12,
+    "section": "A",
+    "dateOfBirth": "2007-06-14",
+    "address": "123 University Avenue, Springfield",
+    "parentInfo": {
+      "fatherName": "William Johnson",
+      "motherName": "Katherine Johnson",
+      "phone": "555-123-8765",
+      "email": "johnson.family12@email.com"
+    },
+    "emergencyContact": "555-765-8765",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "O+"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12002",
+    "firstName": "Olivia",
+    "lastName": "Smith",
+    "gender": "Female",
+    "age": 18,
+    "grade": 12,
+    "section": "A",
+    "dateOfBirth": "2006-11-22",
+    "address": "245 College Street, Springfield",
+    "parentInfo": {
+      "fatherName": "Robert Smith",
+      "motherName": "Elizabeth Smith",
+      "phone": "555-234-9876",
+      "email": "smith.family@email.com"
+    },
+    "emergencyContact": "555-876-9876",
+    "medicalInfo": {
+      "allergies": [
+        "Penicillin"
+      ],
+      "bloodGroup": "A+"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12003",
+    "firstName": "Ethan",
+    "lastName": "Williams",
+    "gender": "Male",
+    "age": 17,
+    "grade": 12,
+    "section": "A",
+    "dateOfBirth": "2007-03-17",
+    "address": "378 Academic Drive, Springfield",
+    "parentInfo": {
+      "fatherName": "James Williams",
+      "motherName": "Patricia Williams",
+      "phone": "555-345-0987",
+      "email": "williams.family12@email.com"
+    },
+    "emergencyContact": "555-987-0987",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "B+"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12004",
+    "firstName": "Ava",
+    "lastName": "Brown",
+    "gender": "Female",
+    "age": 18,
+    "grade": 12,
+    "section": "A",
+    "dateOfBirth": "2006-09-05",
+    "address": "492 Scholar Way, Springfield",
+    "parentInfo": {
+      "fatherName": "Michael Brown",
+      "motherName": "Jennifer Brown",
+      "phone": "555-456-1098",
+      "email": "brown.family12@email.com"
+    },
+    "emergencyContact": "555-098-1098",
+    "medicalInfo": {
+      "allergies": [
+        "Shellfish"
+      ],
+      "bloodGroup": "AB+"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12005",
+    "firstName": "Noah",
+    "lastName": "Miller",
+    "gender": "Male",
+    "age": 17,
+    "grade": 12,
+    "section": "B",
+    "dateOfBirth": "2007-01-30",
+    "address": "567 Graduation Lane, Springfield",
+    "parentInfo": {
+      "fatherName": "Christopher Miller",
+      "motherName": "Amanda Miller",
+      "phone": "555-567-2109",
+      "email": "miller.family12@email.com"
+    },
+    "emergencyContact": "555-109-2109",
+    "medicalInfo": {
+      "allergies": [
+        "Pollen"
+      ],
+      "bloodGroup": "O-"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12006",
+    "firstName": "Isabella",
+    "lastName": "Davis",
+    "gender": "Female",
+    "age": 17,
+    "grade": 12,
+    "section": "B",
+    "dateOfBirth": "2007-04-12",
+    "address": "618 Senior Road, Springfield",
+    "parentInfo": {
+      "fatherName": "Matthew Davis",
+      "motherName": "Laura Davis",
+      "phone": "555-678-3210",
+      "email": "davis.family12@email.com"
+    },
+    "emergencyContact": "555-210-3210",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "A-"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12007",
+    "firstName": "William",
+    "lastName": "Wilson",
+    "gender": "Male",
+    "age": 18,
+    "grade": 12,
+    "section": "B",
+    "dateOfBirth": "2006-08-15",
+    "address": "729 Campus Circle, Springfield",
+    "parentInfo": {
+      "fatherName": "Daniel Wilson",
+      "motherName": "Sophia Wilson",
+      "phone": "555-789-4321",
+      "email": "wilson.family12@email.com"
+    },
+    "emergencyContact": "555-321-4321",
+    "medicalInfo": {
+      "allergies": [
+        "Nuts"
+      ],
+      "bloodGroup": "B-"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12008",
+    "firstName": "Mia",
+    "lastName": "Moore",
+    "gender": "Female",
+    "age": 17,
+    "grade": 12,
+    "section": "B",
+    "dateOfBirth": "2007-05-07",
+    "address": "835 Diploma Street, Springfield",
+    "parentInfo": {
+      "fatherName": "Richard Moore",
+      "motherName": "Nicole Moore",
+      "phone": "555-890-5432",
+      "email": "moore.family12@email.com"
+    },
+    "emergencyContact": "555-432-5432",
+    "medicalInfo": {
+      "allergies": [
+        "Dairy"
+      ],
+      "bloodGroup": "AB-"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12009",
+    "firstName": "James",
+    "lastName": "Taylor",
+    "gender": "Male",
+    "age": 18,
+    "grade": 12,
+    "section": "C",
+    "dateOfBirth": "2006-12-19",
+    "address": "947 Honor Court, Springfield",
+    "parentInfo": {
+      "fatherName": "Joseph Taylor",
+      "motherName": "Rebecca Taylor",
+      "phone": "555-901-6543",
+      "email": "taylor.family12@email.com"
+    },
+    "emergencyContact": "555-543-6543",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "O+"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12010",
+    "firstName": "Charlotte",
+    "lastName": "Anderson",
+    "gender": "Female",
+    "age": 17,
+    "grade": 12,
+    "section": "C",
+    "dateOfBirth": "2007-02-03",
+    "address": "1052 Merit Drive, Springfield",
+    "parentInfo": {
+      "fatherName": "Thomas Anderson",
+      "motherName": "Emily Anderson",
+      "phone": "555-012-7654",
+      "email": "anderson.family12@email.com"
+    },
+    "emergencyContact": "555-654-7654",
+    "medicalInfo": {
+      "allergies": [
+        "Latex"
+      ],
+      "bloodGroup": "A+"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12011",
+    "firstName": "Benjamin",
+    "lastName": "Jackson",
+    "gender": "Male",
+    "age": 18,
+    "grade": 12,
+    "section": "C",
+    "dateOfBirth": "2006-10-09",
+    "address": "1163 Achievement Lane, Springfield",
+    "parentInfo": {
+      "fatherName": "Andrew Jackson",
+      "motherName": "Sarah Jackson",
+      "phone": "555-123-8765",
+      "email": "jackson.family12@email.com"
+    },
+    "emergencyContact": "555-765-8765",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "B+"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12012",
+    "firstName": "Amelia",
+    "lastName": "White",
+    "gender": "Female",
+    "age": 17,
+    "grade": 12,
+    "section": "C",
+    "dateOfBirth": "2007-07-22",
+    "address": "1274 Excellence Way, Springfield",
+    "parentInfo": {
+      "fatherName": "David White",
+      "motherName": "Michelle White",
+      "phone": "555-234-9876",
+      "email": "white.family12@email.com"
+    },
+    "emergencyContact": "555-876-9876",
+    "medicalInfo": {
+      "allergies": [
+        "Insect stings"
+      ],
+      "bloodGroup": "O-"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12013",
+    "firstName": "Elijah",
+    "lastName": "Harris",
+    "gender": "Male",
+    "age": 18,
+    "grade": 12,
+    "section": "D",
+    "dateOfBirth": "2006-11-17",
+    "address": "1385 Success Street, Springfield",
+    "parentInfo": {
+      "fatherName": "Charles Harris",
+      "motherName": "Susan Harris",
+      "phone": "555-345-0987",
+      "email": "harris.family12@email.com"
+    },
+    "emergencyContact": "555-987-0987",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "AB+"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12014",
+    "firstName": "Harper",
+    "lastName": "Martin",
+    "gender": "Female",
+    "age": 17,
+    "grade": 12,
+    "section": "D",
+    "dateOfBirth": "2007-03-29",
+    "address": "1496 Graduate Circle, Springfield",
+    "parentInfo": {
+      "fatherName": "Kevin Martin",
+      "motherName": "Rachel Martin",
+      "phone": "555-456-1098",
+      "email": "martin.family@email.com"
+    },
+    "emergencyContact": "555-098-1098",
+    "medicalInfo": {
+      "allergies": [
+        "Gluten"
+      ],
+      "bloodGroup": "A-"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12015",
+    "firstName": "Alexander",
+    "lastName": "Thompson",
+    "gender": "Male",
+    "age": 18,
+    "grade": 12,
+    "section": "D",
+    "dateOfBirth": "2006-09-10",
+    "address": "1507 Valedictorian Road, Springfield",
+    "parentInfo": {
+      "fatherName": "Brian Thompson",
+      "motherName": "Lisa Thompson",
+      "phone": "555-567-2109",
+      "email": "thompson.family12@email.com"
+    },
+    "emergencyContact": "555-109-2109",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "B-"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12016",
+    "firstName": "Abigail",
+    "lastName": "Garcia",
+    "gender": "Female",
+    "age": 17,
+    "grade": 12,
+    "section": "D",
+    "dateOfBirth": "2007-05-05",
+    "address": "1618 Salutatorian Lane, Springfield",
+    "parentInfo": {
+      "fatherName": "Anthony Garcia",
+      "motherName": "Jessica Garcia",
+      "phone": "555-678-3210",
+      "email": "garcia.family12@email.com"
+    },
+    "emergencyContact": "555-210-3210",
+    "medicalInfo": {
+      "allergies": [
+        "Sulfa drugs"
+      ],
+      "bloodGroup": "AB-"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12017",
+    "firstName": "Daniel",
+    "lastName": "Martinez",
+    "gender": "Male",
+    "age": 18,
+    "grade": 12,
+    "section": "E",
+    "dateOfBirth": "2006-08-28",
+    "address": "1729 Future Drive, Springfield",
+    "parentInfo": {
+      "fatherName": "Juan Martinez",
+      "motherName": "Maria Martinez",
+      "phone": "555-789-4321",
+      "email": "martinez.family12@email.com"
+    },
+    "emergencyContact": "555-321-4321",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "O+"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12018",
+    "firstName": "Emily",
+    "lastName": "Robinson",
+    "gender": "Female",
+    "age": 17,
+    "grade": 12,
+    "section": "E",
+    "dateOfBirth": "2007-01-14",
+    "address": "1830 College Bound Street, Springfield",
+    "parentInfo": {
+      "fatherName": "Steven Robinson",
+      "motherName": "Angela Robinson",
+      "phone": "555-890-5432",
+      "email": "robinson.family12@email.com"
+    },
+    "emergencyContact": "555-432-5432",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "A+"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12019",
+    "firstName": "Henry",
+    "lastName": "Clark",
+    "gender": "Male",
+    "age": 18,
+    "grade": 12,
+    "section": "E",
+    "dateOfBirth": "2006-12-09",
+    "address": "1941 Scholarship Avenue, Springfield",
+    "parentInfo": {
+      "fatherName": "George Clark",
+      "motherName": "Katherine Clark",
+      "phone": "555-901-6543",
+      "email": "clark.family12@email.com"
+    },
+    "emergencyContact": "555-543-6543",
+    "medicalInfo": {
+      "allergies": [
+        "Ibuprofen"
+      ],
+      "bloodGroup": "B+"
+    },
+    "enrollmentDate": "2012-09-01"
+  },
+  {
+    "id": "S12020",
+    "firstName": "Sofia",
+    "lastName": "Rodriguez",
+    "gender": "Female",
+    "age": 17,
+    "grade": 12,
+    "section": "E",
+    "dateOfBirth": "2007-04-20",
+    "address": "2052 Commencement Drive, Springfield",
+    "parentInfo": {
+      "fatherName": "Luis Rodriguez",
+      "motherName": "Elena Rodriguez",
+      "phone": "555-012-7654",
+      "email": "rodriguez.family12@email.com"
+    },
+    "emergencyContact": "555-654-7654",
+    "medicalInfo": {
+      "allergies": [
+        "None"
+      ],
+      "bloodGroup": "AB+"
+    },
+    "enrollmentDate": "2012-09-01"
   }
 ]

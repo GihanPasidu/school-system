@@ -1,12 +1,12 @@
 [
   {
-    "studentId": 1,
-    "subject": "sfgadf",
+    "studentId": "S1001",
+    "subject": "Mathematics",
     "term": "Term 1",
     "score": 90,
     "grade": "A+",
-    "comments": "efaeg",
-    "date": "2025-04-04T09:30:41.126Z",
+    "comments": "Excellent work!",
+    "date": "2024-04-05T09:30:41.126Z",
     "id": 1
   }
 ]

@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "id": "schoolInfo",
+    "name": "Springfield Elementary School",
+    "address": "123 Education Street, Springfield",
+    "phone": "555-123-4567",
+    "email": "info@springfield.edu",
+    "principal": "Dr. Jane Wilson",
+    "website": "www.springfield.edu",
+    "established": "1985",
+    "motto": "Learn Today, Lead Tomorrow",
+    "colors": ["Blue", "Gold"],
+    "lastUpdated": "2024-04-05T10:00:00.000Z"
+  }
+]

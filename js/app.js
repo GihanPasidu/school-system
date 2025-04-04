@@ -254,7 +254,7 @@ async function loadClassView() {
             
             studentsInGrade.forEach(student => {
                 // Get first letter of student name for avatar
-                const firstLetter = student.name.charAt(0).toUpperCase();
+                const firstLetter = student.firstName.charAt(0).toUpperCase();
                 
                 // Create student card
                 const studentCard = document.createElement('div');
@@ -262,17 +262,17 @@ async function loadClassView() {
                 studentCard.innerHTML = `
                     <div class="student-avatar">${firstLetter}</div>
                     <div class="student-info">
-                        <h4>${student.name}</h4>
-                        <p class="student-id">ID: ${student.admission}</p>
+                        <h4>${student.firstName} ${student.lastName}</h4>
+                        <p class="student-id">ID: ${student.id}</p>
                     </div>
                     <div class="card-actions">
-                        <button onclick="viewStudentProfile(${student.id})" class="action-icon view small">
+                        <button onclick="viewStudentProfile('${student.id}')" class="action-icon view small">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button onclick="editStudent(${student.id})" class="action-icon edit small">
+                        <button onclick="editStudent('${student.id}')" class="action-icon edit small">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button onclick="deleteStudent(${student.id})" class="action-icon delete small">
+                        <button onclick="deleteStudent('${student.id}')" class="action-icon delete small">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
@@ -360,17 +360,18 @@ async function loadStudents() {
         // Apply grade filter if selected
         if (gradeFilter) {
             filteredStudents = filteredStudents.filter(student => 
-                student.grade === gradeFilter
+                student.grade === parseInt(gradeFilter) || student.grade === gradeFilter
             );
         }
         
         // Apply search filter if there's a search value
         if (searchValue) {
             const searchLower = searchValue.toLowerCase();
-            filteredStudents = filteredStudents.filter(student => 
-                student.name.toLowerCase().includes(searchLower) || 
-                student.admission.toLowerCase().includes(searchLower)
-            );
+            filteredStudents = filteredStudents.filter(student => {
+                const fullName = `${student.firstName} ${student.lastName}`.toLowerCase();
+                const id = (student.id || '').toString().toLowerCase();
+                return fullName.includes(searchLower) || id.includes(searchLower);
+            });
         }
         
         const studentsList = document.getElementById('students-list');
@@ -385,14 +386,14 @@ async function loadStudents() {
         filteredStudents.forEach((student, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${student.admission}</td>
-                <td>${student.name}</td>
+                <td>${student.id || ''}</td>
+                <td>${student.firstName} ${student.lastName}</td>
                 <td>Grade ${student.grade}</td>
-                <td>${student.contact || 'N/A'}</td>
+                <td>${student.parentInfo?.phone || 'N/A'}</td>
                 <td>
-                    <button onclick="viewStudentProfile(${student.id})" class="action-icon view"><i class="fas fa-eye"></i> View</button>
-                    <button onclick="editStudent(${student.id})" class="action-icon edit"><i class="fas fa-edit"></i> Edit</button>
-                    <button onclick="deleteStudent(${student.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i> Delete</button>
+                    <button onclick="viewStudentProfile('${student.id}')" class="action-icon view"><i class="fas fa-eye"></i> View</button>
+                    <button onclick="editStudent('${student.id}')" class="action-icon edit"><i class="fas fa-edit"></i> Edit</button>
+                    <button onclick="deleteStudent('${student.id}')" class="action-icon delete"><i class="fas fa-trash-alt"></i> Delete</button>
                 </td>
             `;
             
@@ -431,18 +432,26 @@ async function saveStudent(event) {
     
     const studentId = document.getElementById('student-id').value;
     const student = {
-        name: document.getElementById('student-name').value,
-        admission: document.getElementById('student-admission').value,
-        dob: document.getElementById('student-dob').value,
+        firstName: document.getElementById('student-first-name').value,
+        lastName: document.getElementById('student-last-name').value,
+        dateOfBirth: document.getElementById('student-dob').value,
         grade: document.getElementById('student-grade').value,
-        contact: document.getElementById('student-contact').value,
-        address: document.getElementById('student-address').value
+        section: document.getElementById('student-section').value,
+        parentInfo: {
+            phone: document.getElementById('parent-phone').value,
+            email: document.getElementById('parent-email').value
+        },
+        address: document.getElementById('student-address').value,
+        enrollmentDate: document.getElementById('student-enrollment-date').value,
+        medicalInfo: {
+            bloodGroup: document.getElementById('student-blood-group').value
+        }
     };
     
     try {
         if (studentId) {
-            // Update existing student
-            student.id = parseInt(studentId);
+            // Update existing student - preserve id type (string or number)
+            student.id = studentId;
             await schoolDB.update('students', student);
             showNotification('Student updated successfully!');
         } else {
@@ -462,18 +471,30 @@ async function saveStudent(event) {
 
 async function editStudent(id) {
     try {
+        console.log("Editing student with ID:", id);
         const student = await schoolDB.getById('students', id);
-        if (student) {
-            document.getElementById('student-id').value = student.id;
-            document.getElementById('student-name').value = student.name;
-            document.getElementById('student-admission').value = student.admission;
-            document.getElementById('student-dob').value = student.dob;
-            document.getElementById('student-grade').value = student.grade;
-            document.getElementById('student-contact').value = student.contact || '';
-            document.getElementById('student-address').value = student.address || '';
-            
-            document.getElementById('student-form').classList.remove('hidden');
+        
+        if (!student) {
+            console.error("Student not found with ID:", id);
+            showNotification('Failed to load student details. Student not found.', 'error');
+            return;
         }
+        
+        console.log("Found student to edit:", student);
+        
+        document.getElementById('student-id').value = student.id;
+        document.getElementById('student-first-name').value = student.firstName || '';
+        document.getElementById('student-last-name').value = student.lastName || '';
+        document.getElementById('student-dob').value = student.dateOfBirth || '';
+        document.getElementById('student-grade').value = student.grade || '';
+        document.getElementById('student-section').value = student.section || '';
+        document.getElementById('parent-phone').value = student.parentInfo?.phone || '';
+        document.getElementById('parent-email').value = student.parentInfo?.email || '';
+        document.getElementById('student-address').value = student.address || '';
+        document.getElementById('student-enrollment-date').value = student.enrollmentDate || '';
+        document.getElementById('student-blood-group').value = student.medicalInfo?.bloodGroup || '';
+        
+        document.getElementById('student-form').classList.remove('hidden');
     } catch (error) {
         console.error('Error fetching student:', error);
         showNotification('Failed to load student details. Please try again.', 'error');
@@ -483,10 +504,16 @@ async function editStudent(id) {
 async function deleteStudent(id) {
     if (confirm('Are you sure you want to delete this student?')) {
         try {
-            await schoolDB.delete('students', id);
-            await loadStudents();
-            updateDashboard();
-            showNotification('Student deleted successfully!');
+            console.log("Deleting student with ID:", id);
+            const result = await schoolDB.delete('students', id);
+            
+            if (result) {
+                await loadStudents();
+                updateDashboard();
+                showNotification('Student deleted successfully!');
+            } else {
+                showNotification('Student not found.', 'error');
+            }
         } catch (error) {
             console.error('Error deleting student:', error);
             showNotification('Failed to delete student. Please try again.', 'error');
@@ -518,14 +545,14 @@ async function loadTeachers() {
         teachers.forEach((teacher, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${teacher.empId}</td>
-                <td>${teacher.name}</td>
-                <td>${teacher.subject}</td>
-                <td>${teacher.contact}</td>
+                <td>${teacher.id || ''}</td>
+                <td>${teacher.firstName} ${teacher.lastName}</td>
+                <td>${teacher.subject || ''}</td>
+                <td>${teacher.phone || ''}</td>
                 <td>
-                    <button onclick="viewTeacherProfile(${teacher.id})" class="action-icon view"><i class="fas fa-eye"></i> View</button>
-                    <button onclick="editTeacher(${teacher.id})" class="action-icon edit"><i class="fas fa-edit"></i> Edit</button>
-                    <button onclick="deleteTeacher(${teacher.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i> Delete</button>
+                    <button onclick="viewTeacherProfile('${teacher.id}')" class="action-icon view"><i class="fas fa-eye"></i> View</button>
+                    <button onclick="editTeacher('${teacher.id}')" class="action-icon edit"><i class="fas fa-edit"></i> Edit</button>
+                    <button onclick="deleteTeacher('${teacher.id}')" class="action-icon delete"><i class="fas fa-trash-alt"></i> Delete</button>
                 </td>
             `;
             
@@ -558,18 +585,22 @@ async function saveTeacher(event) {
     
     const teacherId = document.getElementById('teacher-id').value;
     const teacher = {
-        name: document.getElementById('teacher-name').value,
-        empId: document.getElementById('teacher-emp-id').value,
-        subject: document.getElementById('teacher-subject').value,
-        contact: document.getElementById('teacher-contact').value,
+        firstName: document.getElementById('teacher-first-name').value,
+        lastName: document.getElementById('teacher-last-name').value,
         email: document.getElementById('teacher-email').value,
-        qualification: document.getElementById('teacher-qualification').value
+        subject: document.getElementById('teacher-subject').value,
+        department: document.getElementById('teacher-department').value,
+        role: document.getElementById('teacher-role').value,
+        phone: document.getElementById('teacher-phone').value,
+        education: document.getElementById('teacher-qualification').value,
+        joinDate: document.getElementById('teacher-join-date').value,
+        isFullTime: document.getElementById('teacher-full-time').checked
     };
     
     try {
         if (teacherId) {
             // Update existing teacher
-            teacher.id = parseInt(teacherId);
+            teacher.id = teacherId;
             await schoolDB.update('teachers', teacher);
             showNotification('Teacher updated successfully!');
         } else {
@@ -592,12 +623,16 @@ async function editTeacher(id) {
         const teacher = await schoolDB.getById('teachers', id);
         if (teacher) {
             document.getElementById('teacher-id').value = teacher.id;
-            document.getElementById('teacher-name').value = teacher.name;
-            document.getElementById('teacher-emp-id').value = teacher.empId;
-            document.getElementById('teacher-subject').value = teacher.subject;
-            document.getElementById('teacher-contact').value = teacher.contact;
+            document.getElementById('teacher-first-name').value = teacher.firstName || '';
+            document.getElementById('teacher-last-name').value = teacher.lastName || '';
             document.getElementById('teacher-email').value = teacher.email || '';
-            document.getElementById('teacher-qualification').value = teacher.qualification || '';
+            document.getElementById('teacher-subject').value = teacher.subject || '';
+            document.getElementById('teacher-department').value = teacher.department || '';
+            document.getElementById('teacher-role').value = teacher.role || '';
+            document.getElementById('teacher-phone').value = teacher.phone || '';
+            document.getElementById('teacher-qualification').value = teacher.education || '';
+            document.getElementById('teacher-join-date').value = teacher.joinDate || '';
+            document.getElementById('teacher-full-time').checked = teacher.isFullTime || false;
             
             document.getElementById('teacher-form').classList.remove('hidden');
         }
@@ -629,21 +664,21 @@ async function searchTeachers() {
     }
     
     try {
-        const results = await schoolDB.searchByField('teachers', 'name', searchValue);
+        const results = await schoolDB.searchByField('teachers', 'firstName', searchValue);
         const teachersList = document.getElementById('teachers-list');
         teachersList.innerHTML = '';
         
         results.forEach(teacher => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${teacher.empId}</td>
-                <td>${teacher.name}</td>
-                <td>${teacher.subject}</td>
-                <td>${teacher.contact}</td>
+                <td>${teacher.id || ''}</td>
+                <td>${teacher.firstName} ${teacher.lastName}</td>
+                <td>${teacher.subject || ''}</td>
+                <td>${teacher.phone || ''}</td>
                 <td>
-                    <button onclick="viewTeacherProfile(${teacher.id})" class="action-icon view"><i class="fas fa-eye"></i> View</button>
-                    <button onclick="editTeacher(${teacher.id})" class="action-icon edit"><i class="fas fa-edit"></i> Edit</button>
-                    <button onclick="deleteTeacher(${teacher.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i> Delete</button>
+                    <button onclick="viewTeacherProfile('${teacher.id}')" class="action-icon view"><i class="fas fa-eye"></i> View</button>
+                    <button onclick="editTeacher('${teacher.id}')" class="action-icon edit"><i class="fas fa-edit"></i> Edit</button>
+                    <button onclick="deleteTeacher('${teacher.id}')" class="action-icon delete"><i class="fas fa-trash-alt"></i> Delete</button>
                 </td>
             `;
             teachersList.appendChild(row);
@@ -658,15 +693,12 @@ async function viewStudentProfile(id) {
     try {
         console.log("Opening student profile for ID:", id); // Debug log
         
-        // Convert id to number if it's a string
-        const studentId = typeof id === 'string' ? parseInt(id) : id;
-        
         // Get all students and find the one with matching id
         const students = await schoolDB.getAll('students');
-        const student = students.find(s => s.id === studentId);
+        const student = students.find(s => s.id.toString() === id.toString());
         
         if (!student) {
-            console.error("Student not found with ID:", studentId);
+            console.error("Student not found with ID:", id);
             showNotification('Student not found.', 'error');
             return;
         }
@@ -681,9 +713,9 @@ async function viewStudentProfile(id) {
         const modal = document.createElement('div');
         modal.className = 'profile-modal';
         
-        const dob = student.dob ? new Date(student.dob).toLocaleDateString() : 'Not specified';
+        const dob = student.dateOfBirth ? new Date(student.dateOfBirth).toLocaleDateString() : 'Not specified';
         // Get first letter of student name for avatar
-        const firstLetter = student.name.charAt(0).toUpperCase();
+        const firstLetter = student.firstName.charAt(0).toUpperCase();
         
         modal.innerHTML = `
             <div class="profile-content">
@@ -701,22 +733,27 @@ async function viewStudentProfile(id) {
                             <div class="profile-avatar">
                                 ${firstLetter}
                             </div>
-                            <h3>${student.name}</h3>
+                            <h3>${student.firstName} ${student.lastName}</h3>
                             <p class="profile-subtitle">
                                 <span class="badge">Grade ${student.grade}</span>
-                                <span>ID: ${student.admission}</span>
+                                <span>Section: ${student.section || 'N/A'}</span>
                             </p>
                         </div>
                         <div class="profile-details">
                             <div class="detail-group">
                                 <i class="fas fa-user"></i>
                                 <label>Full Name</label>
-                                <p>${student.name}</p>
+                                <p>${student.firstName} ${student.lastName}</p>
                             </div>
                             <div class="detail-group">
                                 <i class="fas fa-id-card"></i>
-                                <label>Admission Number</label>
-                                <p>${student.admission}</p>
+                                <label>Student ID</label>
+                                <p>${student.id}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-venus-mars"></i>
+                                <label>Gender</label>
+                                <p>${student.gender || 'Not specified'}</p>
                             </div>
                             <div class="detail-group">
                                 <i class="fas fa-calendar-alt"></i>
@@ -725,18 +762,33 @@ async function viewStudentProfile(id) {
                             </div>
                             <div class="detail-group">
                                 <i class="fas fa-school"></i>
-                                <label>Grade</label>
-                                <p>Grade ${student.grade}</p>
+                                <label>Grade & Section</label>
+                                <p>Grade ${student.grade} - Section ${student.section || 'N/A'}</p>
                             </div>
                             <div class="detail-group">
                                 <i class="fas fa-phone"></i>
-                                <label>Contact</label>
-                                <p>${student.contact || 'Not provided'}</p>
+                                <label>Parent Contact</label>
+                                <p>${student.parentInfo?.phone || 'Not provided'}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-envelope"></i>
+                                <label>Parent Email</label>
+                                <p>${student.parentInfo?.email || 'Not provided'}</p>
                             </div>
                             <div class="detail-group">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <label>Address</label>
                                 <p>${student.address || 'Not provided'}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-calendar-check"></i>
+                                <label>Enrollment Date</label>
+                                <p>${student.enrollmentDate || 'Not provided'}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-tint"></i>
+                                <label>Blood Group</label>
+                                <p>${student.medicalInfo?.bloodGroup || 'Not provided'}</p>
                             </div>
                         </div>
                     </div>
@@ -744,7 +796,7 @@ async function viewStudentProfile(id) {
                         <div class="marks-container">
                             <div class="marks-header">
                                 <h3>Academic Performance</h3>
-                                <button class="add-marks-btn" onclick="showMarksForm(${student.id})">
+                                <button class="add-marks-btn" onclick="showMarksForm('${student.id}')">
                                     <i class="fas fa-plus"></i> Add Marks
                                 </button>
                             </div>
@@ -881,6 +933,7 @@ async function viewTeacherProfile(id) {
     try {
         console.log("Opening teacher profile for ID:", id); // Debug log
         
+        // Get the teacher directly by ID
         const teacher = await schoolDB.getById('teachers', id);
         if (!teacher) {
             showNotification('Teacher not found.', 'error');
@@ -892,7 +945,7 @@ async function viewTeacherProfile(id) {
         modal.className = 'profile-modal';
         
         // Get first letter of teacher name for avatar
-        const firstLetter = teacher.name.charAt(0).toUpperCase();
+        const firstLetter = teacher.firstName.charAt(0).toUpperCase();
         
         modal.innerHTML = `
             <div class="profile-content">
@@ -906,22 +959,22 @@ async function viewTeacherProfile(id) {
                             <div class="profile-avatar">
                                 ${firstLetter}
                             </div>
-                            <h3>${teacher.name}</h3>
+                            <h3>${teacher.firstName} ${teacher.lastName}</h3>
                             <p class="profile-subtitle">
                                 <span class="badge">${teacher.subject}</span>
-                                <span>ID: ${teacher.empId}</span>
+                                <span>Role: ${teacher.role || 'Teacher'}</span>
                             </p>
                         </div>
                         <div class="profile-details">
                             <div class="detail-group">
                                 <i class="fas fa-user"></i>
                                 <label>Full Name</label>
-                                <p>${teacher.name}</p>
+                                <p>${teacher.firstName} ${teacher.lastName}</p>
                             </div>
                             <div class="detail-group">
                                 <i class="fas fa-id-badge"></i>
                                 <label>Employee ID</label>
-                                <p>${teacher.empId}</p>
+                                <p>${teacher.id}</p>
                             </div>
                             <div class="detail-group">
                                 <i class="fas fa-book"></i>
@@ -929,9 +982,14 @@ async function viewTeacherProfile(id) {
                                 <p>${teacher.subject}</p>
                             </div>
                             <div class="detail-group">
+                                <i class="fas fa-building"></i>
+                                <label>Department</label>
+                                <p>${teacher.department || 'Not specified'}</p>
+                            </div>
+                            <div class="detail-group">
                                 <i class="fas fa-phone"></i>
                                 <label>Contact</label>
-                                <p>${teacher.contact || 'Not provided'}</p>
+                                <p>${teacher.phone || 'Not provided'}</p>
                             </div>
                             <div class="detail-group">
                                 <i class="fas fa-envelope"></i>
@@ -940,8 +998,18 @@ async function viewTeacherProfile(id) {
                             </div>
                             <div class="detail-group">
                                 <i class="fas fa-user-graduate"></i>
-                                <label>Qualification</label>
-                                <p>${teacher.qualification || 'Not provided'}</p>
+                                <label>Education</label>
+                                <p>${teacher.education || 'Not provided'}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-calendar-alt"></i>
+                                <label>Join Date</label>
+                                <p>${teacher.joinDate || 'Not provided'}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-clock"></i>
+                                <label>Employment Type</label>
+                                <p>${teacher.isFullTime ? 'Full-time' : 'Part-time'}</p>
                             </div>
                         </div>
                     </div>
@@ -1156,8 +1224,8 @@ function renderStudentMarks(marks) {
                     <td>${mark.score}/100</td>
                     <td><span class="grade-badge grade-${mark.grade.charAt(0).toLowerCase()}">${mark.grade}</span></td>
                     <td>
-                        <button onclick="editMarks(${mark.id})" class="action-icon edit small"><i class="fas fa-edit"></i></button>
-                        <button onclick="deleteMarks(${mark.id})" class="action-icon delete small"><i class="fas fa-trash-alt"></i></button>
+                        <button onclick="editMarks('${mark.id}')" class="action-icon edit small"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteMarks('${mark.id}')" class="action-icon delete small"><i class="fas fa-trash-alt"></i></button>
                     </td>
                 </tr>
             `;
@@ -1207,9 +1275,10 @@ function hideMarksForm() {
 async function saveMarks() {
     try {
         const markId = document.getElementById('marks-id').value.trim();
-        const studentId = parseInt(document.getElementById('marks-student-id').value);
+        const studentIdElement = document.getElementById('marks-student-id');
+        const studentId = studentIdElement.value;
         
-        if (isNaN(studentId)) {
+        if (!studentId) {
             throw new Error("Invalid student ID");
         }
         
@@ -1225,7 +1294,7 @@ async function saveMarks() {
         
         if (markId) {
             // Update existing mark
-            mark.id = parseInt(markId);
+            mark.id = markId;
             await schoolDB.update('marks', mark);
             showNotification('Marks updated successfully!');
         } else {

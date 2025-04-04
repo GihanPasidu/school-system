@@ -86,11 +86,48 @@ class SchoolDatabase {
             // Load current data
             const items = [...this.data[storeName]];
             
-            // Generate ID
-            const maxId = items.length > 0 
-                ? Math.max(...items.map(item => parseInt(item.id) || 0)) 
-                : 0;
-            data.id = maxId + 1;
+            // Generate ID - handle both string and numeric IDs
+            if (!data.id) {
+                if (storeName === 'students' && items.length > 0) {
+                    // For students, extract the next sequential number based on pattern S{grade}###
+                    const gradePrefix = `S${data.grade || 1}`;
+                    const gradeItems = items.filter(item => item.id && item.id.startsWith(gradePrefix));
+                    
+                    if (gradeItems.length > 0) {
+                        // Extract numeric portion and find max
+                        const maxNum = Math.max(...gradeItems.map(item => {
+                            const numPart = item.id.substring(gradePrefix.length);
+                            return parseInt(numPart) || 0;
+                        }));
+                        data.id = `${gradePrefix}${(maxNum + 1).toString().padStart(3, '0')}`;
+                    } else {
+                        // First student in this grade
+                        data.id = `${gradePrefix}001`;
+                    }
+                } else if (storeName === 'teachers' && items.length > 0) {
+                    // For teachers, extract the next sequential number based on pattern T###
+                    const prefix = 'T';
+                    const teacherItems = items.filter(item => item.id && item.id.startsWith(prefix));
+                    
+                    if (teacherItems.length > 0) {
+                        // Extract numeric portion and find max
+                        const maxNum = Math.max(...teacherItems.map(item => {
+                            const numPart = item.id.substring(prefix.length);
+                            return parseInt(numPart) || 0;
+                        }));
+                        data.id = `${prefix}${(maxNum + 1).toString().padStart(3, '0')}`;
+                    } else {
+                        // First teacher
+                        data.id = `${prefix}001`;
+                    }
+                } else {
+                    // Default numeric ID generation for other data types
+                    const maxId = items.length > 0 
+                        ? Math.max(...items.map(item => parseInt(item.id) || 0)) 
+                        : 0;
+                    data.id = maxId + 1;
+                }
+            }
             
             // Add item
             items.push(data);
@@ -119,12 +156,24 @@ class SchoolDatabase {
     // Generic method to get data by ID
     async getById(storeName, id) {
         try {
-            console.log(`Getting ${storeName} with ID:`, id); // Debug log
-            const idNumber = parseInt(id);
-            const items = this.data[storeName];
-            const result = items.find(item => parseInt(item.id) === idNumber);
-            console.log("Found item:", result); // Debug log
+            console.log(`Getting ${storeName} with ID:`, id);
             
+            // Exit early if id is undefined or null
+            if (id === undefined || id === null) {
+                console.error(`Invalid ID provided for ${storeName}:`, id);
+                return null;
+            }
+            
+            const items = this.data[storeName];
+            const idString = id.toString();
+            
+            // Find the item with matching ID
+            const result = items.find(item => {
+                if (item.id === undefined || item.id === null) return false;
+                return item.id.toString() === idString;
+            });
+            
+            console.log("Found item:", result);
             return result || null;
         } catch (error) {
             console.error(`Error getting by id from ${storeName}:`, error);
@@ -136,7 +185,16 @@ class SchoolDatabase {
     async update(storeName, data) {
         try {
             const items = [...this.data[storeName]];
-            const index = items.findIndex(item => parseInt(item.id) === parseInt(data.id));
+            let index;
+            
+            // Convert both IDs to string for comparison
+            const dataIdString = data.id !== undefined && data.id !== null ? data.id.toString() : '';
+            
+            // Find item index by ID
+            index = items.findIndex(item => {
+                const itemId = item.id !== undefined && item.id !== null ? item.id.toString() : '';
+                return itemId === dataIdString;
+            });
             
             if (index !== -1) {
                 items[index] = data;
@@ -156,7 +214,15 @@ class SchoolDatabase {
     async delete(storeName, id) {
         try {
             const items = [...this.data[storeName]];
-            const filtered = items.filter(item => parseInt(item.id) !== parseInt(id));
+            
+            // Convert ID to string for comparison
+            const idString = id !== undefined && id !== null ? id.toString() : '';
+            
+            // Filter out item with matching ID
+            const filtered = items.filter(item => {
+                const itemId = item.id !== undefined && item.id !== null ? item.id.toString() : '';
+                return itemId !== idString;
+            });
             
             if (filtered.length !== items.length) {
                 this.data[storeName] = filtered;
