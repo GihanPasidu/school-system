@@ -205,6 +205,7 @@ async function loadStudents() {
                 <td>Grade ${student.grade}</td>
                 <td>${student.contact || 'N/A'}</td>
                 <td>
+                    <button onclick="viewStudentProfile(${student.id})" class="action-icon view"><i class="fas fa-eye"></i> View</button>
                     <button onclick="editStudent(${student.id})" class="action-icon edit"><i class="fas fa-edit"></i> Edit</button>
                     <button onclick="deleteStudent(${student.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i> Delete</button>
                 </td>
@@ -342,6 +343,7 @@ async function loadTeachers() {
                 <td>${teacher.subject}</td>
                 <td>${teacher.contact}</td>
                 <td>
+                    <button onclick="viewTeacherProfile(${teacher.id})" class="action-icon view"><i class="fas fa-eye"></i> View</button>
                     <button onclick="editTeacher(${teacher.id})" class="action-icon edit"><i class="fas fa-edit"></i> Edit</button>
                     <button onclick="deleteTeacher(${teacher.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i> Delete</button>
                 </td>
@@ -459,6 +461,7 @@ async function searchTeachers() {
                 <td>${teacher.subject}</td>
                 <td>${teacher.contact}</td>
                 <td>
+                    <button onclick="viewTeacherProfile(${teacher.id})" class="action-icon view"><i class="fas fa-eye"></i> View</button>
                     <button onclick="editTeacher(${teacher.id})" class="action-icon edit"><i class="fas fa-edit"></i> Edit</button>
                     <button onclick="deleteTeacher(${teacher.id})" class="action-icon delete"><i class="fas fa-trash-alt"></i> Delete</button>
                 </td>
@@ -467,6 +470,163 @@ async function searchTeachers() {
         });
     } catch (error) {
         console.error('Error searching teachers:', error);
+    }
+}
+
+// New functions to view profiles
+async function viewStudentProfile(id) {
+    try {
+        const student = await schoolDB.getById('students', id);
+        if (!student) {
+            showNotification('Student not found.', 'error');
+            return;
+        }
+        
+        // Create and show modal with student information
+        const modal = document.createElement('div');
+        modal.className = 'profile-modal';
+        
+        const dob = student.dob ? new Date(student.dob).toLocaleDateString() : 'Not specified';
+        
+        modal.innerHTML = `
+            <div class="profile-content">
+                <div class="profile-header">
+                    <h2><i class="fas fa-user-graduate"></i> Student Profile</h2>
+                    <button class="close-modal"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="profile-body">
+                    <div class="profile-image">
+                        <i class="fas fa-user-circle"></i>
+                        <h3>${student.name}</h3>
+                        <p class="profile-subtitle">Grade ${student.grade} | ID: ${student.admission}</p>
+                    </div>
+                    <div class="profile-details">
+                        <div class="detail-group">
+                            <label>Full Name:</label>
+                            <p>${student.name}</p>
+                        </div>
+                        <div class="detail-group">
+                            <label>Admission Number:</label>
+                            <p>${student.admission}</p>
+                        </div>
+                        <div class="detail-group">
+                            <label>Date of Birth:</label>
+                            <p>${dob}</p>
+                        </div>
+                        <div class="detail-group">
+                            <label>Grade:</label>
+                            <p>Grade ${student.grade}</p>
+                        </div>
+                        <div class="detail-group">
+                            <label>Contact:</label>
+                            <p>${student.contact || 'Not provided'}</p>
+                        </div>
+                        <div class="detail-group">
+                            <label>Address:</label>
+                            <p>${student.address || 'Not provided'}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-footer">
+                    <button class="edit-profile-btn" onclick="editStudent(${student.id})"><i class="fas fa-edit"></i> Edit Profile</button>
+                    <button class="close-modal-btn"><i class="fas fa-times"></i> Close</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        // Add active class to trigger animation after a small delay
+        setTimeout(() => modal.classList.add('active'), 10);
+        
+        // Close modal functionality
+        const closeButtons = modal.querySelectorAll('.close-modal, .close-modal-btn');
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                modal.classList.remove('active');
+                setTimeout(() => modal.remove(), 300); // Remove after animation
+            });
+        });
+        
+    } catch (error) {
+        console.error('Error viewing student profile:', error);
+        showNotification('Failed to load student profile.', 'error');
+    }
+}
+
+async function viewTeacherProfile(id) {
+    try {
+        const teacher = await schoolDB.getById('teachers', id);
+        if (!teacher) {
+            showNotification('Teacher not found.', 'error');
+            return;
+        }
+        
+        // Create and show modal with teacher information
+        const modal = document.createElement('div');
+        modal.className = 'profile-modal';
+        
+        modal.innerHTML = `
+            <div class="profile-content">
+                <div class="profile-header">
+                    <h2><i class="fas fa-chalkboard-teacher"></i> Teacher Profile</h2>
+                    <button class="close-modal"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="profile-body">
+                    <div class="profile-image">
+                        <i class="fas fa-user-circle"></i>
+                        <h3>${teacher.name}</h3>
+                        <p class="profile-subtitle">${teacher.subject} | ID: ${teacher.empId}</p>
+                    </div>
+                    <div class="profile-details">
+                        <div class="detail-group">
+                            <label>Full Name:</label>
+                            <p>${teacher.name}</p>
+                        </div>
+                        <div class="detail-group">
+                            <label>Employee ID:</label>
+                            <p>${teacher.empId}</p>
+                        </div>
+                        <div class="detail-group">
+                            <label>Subject:</label>
+                            <p>${teacher.subject}</p>
+                        </div>
+                        <div class="detail-group">
+                            <label>Contact:</label>
+                            <p>${teacher.contact || 'Not provided'}</p>
+                        </div>
+                        <div class="detail-group">
+                            <label>Email:</label>
+                            <p>${teacher.email || 'Not provided'}</p>
+                        </div>
+                        <div class="detail-group">
+                            <label>Qualification:</label>
+                            <p>${teacher.qualification || 'Not provided'}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-footer">
+                    <button class="edit-profile-btn" onclick="editTeacher(${teacher.id})"><i class="fas fa-edit"></i> Edit Profile</button>
+                    <button class="close-modal-btn"><i class="fas fa-times"></i> Close</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        // Add active class to trigger animation after a small delay
+        setTimeout(() => modal.classList.add('active'), 10);
+        
+        // Close modal functionality
+        const closeButtons = modal.querySelectorAll('.close-modal, .close-modal-btn');
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                modal.classList.remove('active');
+                setTimeout(() => modal.remove(), 300); // Remove after animation
+            });
+        });
+        
+    } catch (error) {
+        console.error('Error viewing teacher profile:', error);
+        showNotification('Failed to load teacher profile.', 'error');
     }
 }
 
@@ -615,3 +775,5 @@ window.showLoading = showLoading;
 window.hideLoading = hideLoading;
 window.stylizeCloudNextra = stylizeCloudNextra;
 window.filterStudentsByGrade = filterStudentsByGrade;
+window.viewStudentProfile = viewStudentProfile;
+window.viewTeacherProfile = viewTeacherProfile;
