@@ -487,6 +487,8 @@ async function viewStudentProfile(id) {
         modal.className = 'profile-modal';
         
         const dob = student.dob ? new Date(student.dob).toLocaleDateString() : 'Not specified';
+        // Get first letter of student name for avatar
+        const firstLetter = student.name.charAt(0).toUpperCase();
         
         modal.innerHTML = `
             <div class="profile-content">
@@ -496,40 +498,54 @@ async function viewStudentProfile(id) {
                 </div>
                 <div class="profile-body">
                     <div class="profile-image">
-                        <i class="fas fa-user-circle"></i>
+                        <div class="profile-avatar">
+                            ${firstLetter}
+                        </div>
                         <h3>${student.name}</h3>
-                        <p class="profile-subtitle">Grade ${student.grade} | ID: ${student.admission}</p>
+                        <p class="profile-subtitle">
+                            <span class="badge">Grade ${student.grade}</span>
+                            <span>ID: ${student.admission}</span>
+                        </p>
                     </div>
                     <div class="profile-details">
                         <div class="detail-group">
-                            <label>Full Name:</label>
+                            <i class="fas fa-user"></i>
+                            <label>Full Name</label>
                             <p>${student.name}</p>
                         </div>
                         <div class="detail-group">
-                            <label>Admission Number:</label>
+                            <i class="fas fa-id-card"></i>
+                            <label>Admission Number</label>
                             <p>${student.admission}</p>
                         </div>
                         <div class="detail-group">
-                            <label>Date of Birth:</label>
+                            <i class="fas fa-calendar-alt"></i>
+                            <label>Date of Birth</label>
                             <p>${dob}</p>
                         </div>
                         <div class="detail-group">
-                            <label>Grade:</label>
+                            <i class="fas fa-school"></i>
+                            <label>Grade</label>
                             <p>Grade ${student.grade}</p>
                         </div>
                         <div class="detail-group">
-                            <label>Contact:</label>
+                            <i class="fas fa-phone"></i>
+                            <label>Contact</label>
                             <p>${student.contact || 'Not provided'}</p>
                         </div>
                         <div class="detail-group">
-                            <label>Address:</label>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <label>Address</label>
                             <p>${student.address || 'Not provided'}</p>
                         </div>
                     </div>
                 </div>
                 <div class="profile-footer">
-                    <button class="edit-profile-btn" onclick="editStudent(${student.id})"><i class="fas fa-edit"></i> Edit Profile</button>
-                    <button class="close-modal-btn"><i class="fas fa-times"></i> Close</button>
+                    <div class="profile-id">Student ID: ${student.id}</div>
+                    <div class="profile-actions">
+                        <button class="edit-profile-btn" onclick="editStudent(${student.id})"><i class="fas fa-edit"></i> Edit Profile</button>
+                        <button class="close-modal-btn"><i class="fas fa-times"></i> Close</button>
+                    </div>
                 </div>
             </div>
         `;
@@ -565,6 +581,9 @@ async function viewTeacherProfile(id) {
         const modal = document.createElement('div');
         modal.className = 'profile-modal';
         
+        // Get first letter of teacher name for avatar
+        const firstLetter = teacher.name.charAt(0).toUpperCase();
+        
         modal.innerHTML = `
             <div class="profile-content">
                 <div class="profile-header">
@@ -573,40 +592,54 @@ async function viewTeacherProfile(id) {
                 </div>
                 <div class="profile-body">
                     <div class="profile-image">
-                        <i class="fas fa-user-circle"></i>
+                        <div class="profile-avatar">
+                            ${firstLetter}
+                        </div>
                         <h3>${teacher.name}</h3>
-                        <p class="profile-subtitle">${teacher.subject} | ID: ${teacher.empId}</p>
+                        <p class="profile-subtitle">
+                            <span class="badge">${teacher.subject}</span>
+                            <span>ID: ${teacher.empId}</span>
+                        </p>
                     </div>
                     <div class="profile-details">
                         <div class="detail-group">
-                            <label>Full Name:</label>
+                            <i class="fas fa-user"></i>
+                            <label>Full Name</label>
                             <p>${teacher.name}</p>
                         </div>
                         <div class="detail-group">
-                            <label>Employee ID:</label>
+                            <i class="fas fa-id-badge"></i>
+                            <label>Employee ID</label>
                             <p>${teacher.empId}</p>
                         </div>
                         <div class="detail-group">
-                            <label>Subject:</label>
+                            <i class="fas fa-book"></i>
+                            <label>Subject</label>
                             <p>${teacher.subject}</p>
                         </div>
                         <div class="detail-group">
-                            <label>Contact:</label>
+                            <i class="fas fa-phone"></i>
+                            <label>Contact</label>
                             <p>${teacher.contact || 'Not provided'}</p>
                         </div>
                         <div class="detail-group">
-                            <label>Email:</label>
+                            <i class="fas fa-envelope"></i>
+                            <label>Email</label>
                             <p>${teacher.email || 'Not provided'}</p>
                         </div>
                         <div class="detail-group">
-                            <label>Qualification:</label>
+                            <i class="fas fa-user-graduate"></i>
+                            <label>Qualification</label>
                             <p>${teacher.qualification || 'Not provided'}</p>
                         </div>
                     </div>
                 </div>
                 <div class="profile-footer">
-                    <button class="edit-profile-btn" onclick="editTeacher(${teacher.id})"><i class="fas fa-edit"></i> Edit Profile</button>
-                    <button class="close-modal-btn"><i class="fas fa-times"></i> Close</button>
+                    <div class="profile-id">Teacher ID: ${teacher.id}</div>
+                    <div class="profile-actions">
+                        <button class="edit-profile-btn" onclick="editTeacher(${teacher.id})"><i class="fas fa-edit"></i> Edit Profile</button>
+                        <button class="close-modal-btn"><i class="fas fa-times"></i> Close</button>
+                    </div>
                 </div>
             </div>
         `;
