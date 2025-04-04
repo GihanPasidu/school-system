@@ -27,6 +27,7 @@ const createEmptyJsonFile = (filename) => {
 createEmptyJsonFile('students.json');
 createEmptyJsonFile('teachers.json');
 createEmptyJsonFile('settings.json');
+createEmptyJsonFile('marks.json'); // Add marks.json file
 
 // Route to save file
 app.post('/save-file', (req, res) => {

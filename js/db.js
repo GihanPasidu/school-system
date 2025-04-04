@@ -5,12 +5,14 @@ class SchoolDatabase {
         this.dataFiles = {
             students: `${this.dataFolder}/students.json`,
             teachers: `${this.dataFolder}/teachers.json`,
-            settings: `${this.dataFolder}/settings.json`
+            settings: `${this.dataFolder}/settings.json`,
+            marks: `${this.dataFolder}/marks.json`
         };
         this.data = {
             students: [],
             teachers: [],
-            settings: []
+            settings: [],
+            marks: []
         };
         this.initDB();
     }
@@ -117,8 +119,13 @@ class SchoolDatabase {
     // Generic method to get data by ID
     async getById(storeName, id) {
         try {
+            console.log(`Getting ${storeName} with ID:`, id); // Debug log
+            const idNumber = parseInt(id);
             const items = this.data[storeName];
-            return items.find(item => parseInt(item.id) === parseInt(id)) || null;
+            const result = items.find(item => parseInt(item.id) === idNumber);
+            console.log("Found item:", result); // Debug log
+            
+            return result || null;
         } catch (error) {
             console.error(`Error getting by id from ${storeName}:`, error);
             throw error;
@@ -189,6 +196,7 @@ class SchoolDatabase {
                 students: this.data.students,
                 teachers: this.data.teachers,
                 settings: this.data.settings,
+                marks: this.data.marks,
                 metadata: {
                     exportDate: new Date().toISOString(),
                     version: '1.0',
@@ -214,11 +222,13 @@ class SchoolDatabase {
             if (data.students) this.data.students = data.students;
             if (data.teachers) this.data.teachers = data.teachers;
             if (data.settings) this.data.settings = data.settings;
+            if (data.marks) this.data.marks = data.marks;
             
             // Write to files
             await this.saveFile(this.dataFiles.students, JSON.stringify(this.data.students, null, 2));
             await this.saveFile(this.dataFiles.teachers, JSON.stringify(this.data.teachers, null, 2));
             await this.saveFile(this.dataFiles.settings, JSON.stringify(this.data.settings, null, 2));
+            await this.saveFile(this.dataFiles.marks, JSON.stringify(this.data.marks, null, 2));
             
             return true;
         } catch (error) {

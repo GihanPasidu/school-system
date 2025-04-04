@@ -476,11 +476,26 @@ async function searchTeachers() {
 // New functions to view profiles
 async function viewStudentProfile(id) {
     try {
-        const student = await schoolDB.getById('students', id);
+        console.log("Opening student profile for ID:", id); // Debug log
+        
+        // Convert id to number if it's a string
+        const studentId = typeof id === 'string' ? parseInt(id) : id;
+        
+        // Get all students and find the one with matching id
+        const students = await schoolDB.getAll('students');
+        const student = students.find(s => s.id === studentId);
+        
         if (!student) {
+            console.error("Student not found with ID:", studentId);
             showNotification('Student not found.', 'error');
             return;
         }
+        
+        console.log("Found student:", student); // Debug log
+        
+        // Fetch student's marks
+        const allMarks = await schoolDB.getAll('marks') || [];
+        const studentMarks = allMarks.filter(mark => mark.studentId === student.id);
         
         // Create and show modal with student information
         const modal = document.createElement('div');
@@ -496,65 +511,180 @@ async function viewStudentProfile(id) {
                     <h2><i class="fas fa-user-graduate"></i> Student Profile</h2>
                     <button class="close-modal"><i class="fas fa-times"></i></button>
                 </div>
+                <div class="profile-tabs">
+                    <button class="tab-btn active" data-tab="info"><i class="fas fa-info-circle"></i> Info</button>
+                    <button class="tab-btn" data-tab="marks"><i class="fas fa-chart-line"></i> Marks</button>
+                </div>
                 <div class="profile-body">
-                    <div class="profile-image">
-                        <div class="profile-avatar">
-                            ${firstLetter}
+                    <div class="tab-content active" id="tab-info">
+                        <div class="profile-image">
+                            <div class="profile-avatar">
+                                ${firstLetter}
+                            </div>
+                            <h3>${student.name}</h3>
+                            <p class="profile-subtitle">
+                                <span class="badge">Grade ${student.grade}</span>
+                                <span>ID: ${student.admission}</span>
+                            </p>
                         </div>
-                        <h3>${student.name}</h3>
-                        <p class="profile-subtitle">
-                            <span class="badge">Grade ${student.grade}</span>
-                            <span>ID: ${student.admission}</span>
-                        </p>
+                        <div class="profile-details">
+                            <div class="detail-group">
+                                <i class="fas fa-user"></i>
+                                <label>Full Name</label>
+                                <p>${student.name}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-id-card"></i>
+                                <label>Admission Number</label>
+                                <p>${student.admission}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-calendar-alt"></i>
+                                <label>Date of Birth</label>
+                                <p>${dob}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-school"></i>
+                                <label>Grade</label>
+                                <p>Grade ${student.grade}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-phone"></i>
+                                <label>Contact</label>
+                                <p>${student.contact || 'Not provided'}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <label>Address</label>
+                                <p>${student.address || 'Not provided'}</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="profile-details">
-                        <div class="detail-group">
-                            <i class="fas fa-user"></i>
-                            <label>Full Name</label>
-                            <p>${student.name}</p>
-                        </div>
-                        <div class="detail-group">
-                            <i class="fas fa-id-card"></i>
-                            <label>Admission Number</label>
-                            <p>${student.admission}</p>
-                        </div>
-                        <div class="detail-group">
-                            <i class="fas fa-calendar-alt"></i>
-                            <label>Date of Birth</label>
-                            <p>${dob}</p>
-                        </div>
-                        <div class="detail-group">
-                            <i class="fas fa-school"></i>
-                            <label>Grade</label>
-                            <p>Grade ${student.grade}</p>
-                        </div>
-                        <div class="detail-group">
-                            <i class="fas fa-phone"></i>
-                            <label>Contact</label>
-                            <p>${student.contact || 'Not provided'}</p>
-                        </div>
-                        <div class="detail-group">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <label>Address</label>
-                            <p>${student.address || 'Not provided'}</p>
+                    <div class="tab-content" id="tab-marks">
+                        <div class="marks-container">
+                            <div class="marks-header">
+                                <h3>Academic Performance</h3>
+                                <button class="add-marks-btn" onclick="showMarksForm(${student.id})">
+                                    <i class="fas fa-plus"></i> Add Marks
+                                </button>
+                            </div>
+                            <div class="marks-list" id="student-marks-list">
+                                ${renderStudentMarks(studentMarks)}
+                            </div>
+                            <div class="marks-form hidden" id="marks-form-container">
+                                <form id="marks-form">
+                                    <input type="hidden" id="marks-student-id" value="${student.id}">
+                                    <input type="hidden" id="marks-id" value="">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="marks-subject">Subject</label>
+                                            <input type="text" id="marks-subject" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="marks-term">Term/Period</label>
+                                            <select id="marks-term" required>
+                                                <option value="Term 1">Term 1</option>
+                                                <option value="Term 2">Term 2</option>
+                                                <option value="Term 3">Term 3</option>
+                                                <option value="Final">Final</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="marks-score">Score</label>
+                                            <input type="number" id="marks-score" min="0" max="100" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="marks-grade">Grade</label>
+                                            <select id="marks-grade" required>
+                                                <option value="A+">A+</option>
+                                                <option value="A">A</option>
+                                                <option value="B+">B+</option>
+                                                <option value="B">B</option>
+                                                <option value="C+">C+</option>
+                                                <option value="C">C</option>
+                                                <option value="S">S</option>
+                                                <option value="F">F</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="marks-comments">Comments</label>
+                                            <textarea id="marks-comments" rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="button" onclick="hideMarksForm()" class="secondary-button">
+                                            <i class="fas fa-times"></i> Cancel
+                                        </button>
+                                        <button type="button" onclick="saveMarks()" class="success-button">
+                                            <i class="fas fa-save"></i> Save Marks
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="profile-footer">
                     <div class="profile-id">Student ID: ${student.id}</div>
                     <div class="profile-actions">
-                        <button class="edit-profile-btn" onclick="editStudent(${student.id})"><i class="fas fa-edit"></i> Edit Profile</button>
                         <button class="close-modal-btn"><i class="fas fa-times"></i> Close</button>
                     </div>
                 </div>
             </div>
         `;
         
+        // Append to DOM first
         document.body.appendChild(modal);
-        // Add active class to trigger animation after a small delay
-        setTimeout(() => modal.classList.add('active'), 10);
         
-        // Close modal functionality
+        // Debug check to make sure modal was appended
+        console.log("Modal appended to DOM");
+        
+        // Ensure the modal is visible with increased delay
+        setTimeout(() => {
+            console.log("Showing modal - adding active class");
+            modal.classList.add('active');
+            
+            // Setup tab functionality after modal is visible
+            setupModalTabs(modal);
+            
+            // Setup close functionality
+            setupModalClose(modal);
+        }, 100); // Increased delay for better rendering
+        
+    } catch (error) {
+        console.error('Error details:', error);
+        showNotification('Failed to load student profile. Please try again.', 'error');
+    }
+}
+
+// Helper function to setup modal tabs
+function setupModalTabs(modal) {
+    try {
+        const tabButtons = modal.querySelectorAll('.tab-btn');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tab = button.dataset.tab;
+                // Update active tab button
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Show corresponding tab content
+                modal.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                modal.querySelector(`#tab-${tab}`).classList.add('active');
+            });
+        });
+    } catch (err) {
+        console.error("Error setting up tabs:", err);
+    }
+}
+
+// Helper function to setup modal close
+function setupModalClose(modal) {
+    try {
         const closeButtons = modal.querySelectorAll('.close-modal, .close-modal-btn');
         closeButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -562,15 +692,15 @@ async function viewStudentProfile(id) {
                 setTimeout(() => modal.remove(), 300); // Remove after animation
             });
         });
-        
-    } catch (error) {
-        console.error('Error viewing student profile:', error);
-        showNotification('Failed to load student profile.', 'error');
+    } catch (err) {
+        console.error("Error setting up close buttons:", err);
     }
 }
 
 async function viewTeacherProfile(id) {
     try {
+        console.log("Opening teacher profile for ID:", id); // Debug log
+        
         const teacher = await schoolDB.getById('teachers', id);
         if (!teacher) {
             showNotification('Teacher not found.', 'error');
@@ -591,53 +721,54 @@ async function viewTeacherProfile(id) {
                     <button class="close-modal"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="profile-body">
-                    <div class="profile-image">
-                        <div class="profile-avatar">
-                            ${firstLetter}
+                    <div class="tab-content active" id="tab-info">
+                        <div class="profile-image">
+                            <div class="profile-avatar">
+                                ${firstLetter}
+                            </div>
+                            <h3>${teacher.name}</h3>
+                            <p class="profile-subtitle">
+                                <span class="badge">${teacher.subject}</span>
+                                <span>ID: ${teacher.empId}</span>
+                            </p>
                         </div>
-                        <h3>${teacher.name}</h3>
-                        <p class="profile-subtitle">
-                            <span class="badge">${teacher.subject}</span>
-                            <span>ID: ${teacher.empId}</span>
-                        </p>
-                    </div>
-                    <div class="profile-details">
-                        <div class="detail-group">
-                            <i class="fas fa-user"></i>
-                            <label>Full Name</label>
-                            <p>${teacher.name}</p>
-                        </div>
-                        <div class="detail-group">
-                            <i class="fas fa-id-badge"></i>
-                            <label>Employee ID</label>
-                            <p>${teacher.empId}</p>
-                        </div>
-                        <div class="detail-group">
-                            <i class="fas fa-book"></i>
-                            <label>Subject</label>
-                            <p>${teacher.subject}</p>
-                        </div>
-                        <div class="detail-group">
-                            <i class="fas fa-phone"></i>
-                            <label>Contact</label>
-                            <p>${teacher.contact || 'Not provided'}</p>
-                        </div>
-                        <div class="detail-group">
-                            <i class="fas fa-envelope"></i>
-                            <label>Email</label>
-                            <p>${teacher.email || 'Not provided'}</p>
-                        </div>
-                        <div class="detail-group">
-                            <i class="fas fa-user-graduate"></i>
-                            <label>Qualification</label>
-                            <p>${teacher.qualification || 'Not provided'}</p>
+                        <div class="profile-details">
+                            <div class="detail-group">
+                                <i class="fas fa-user"></i>
+                                <label>Full Name</label>
+                                <p>${teacher.name}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-id-badge"></i>
+                                <label>Employee ID</label>
+                                <p>${teacher.empId}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-book"></i>
+                                <label>Subject</label>
+                                <p>${teacher.subject}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-phone"></i>
+                                <label>Contact</label>
+                                <p>${teacher.contact || 'Not provided'}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-envelope"></i>
+                                <label>Email</label>
+                                <p>${teacher.email || 'Not provided'}</p>
+                            </div>
+                            <div class="detail-group">
+                                <i class="fas fa-user-graduate"></i>
+                                <label>Qualification</label>
+                                <p>${teacher.qualification || 'Not provided'}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="profile-footer">
                     <div class="profile-id">Teacher ID: ${teacher.id}</div>
                     <div class="profile-actions">
-                        <button class="edit-profile-btn" onclick="editTeacher(${teacher.id})"><i class="fas fa-edit"></i> Edit Profile</button>
                         <button class="close-modal-btn"><i class="fas fa-times"></i> Close</button>
                     </div>
                 </div>
@@ -645,8 +776,12 @@ async function viewTeacherProfile(id) {
         `;
         
         document.body.appendChild(modal);
-        // Add active class to trigger animation after a small delay
-        setTimeout(() => modal.classList.add('active'), 10);
+        
+        // Ensure the modal is visible by waiting for the DOM to update
+        setTimeout(() => {
+            console.log("Showing modal");
+            modal.classList.add('active');
+        }, 50);
         
         // Close modal functionality
         const closeButtons = modal.querySelectorAll('.close-modal, .close-modal-btn');
@@ -799,6 +934,201 @@ async function importData(event) {
     reader.readAsText(file);
 }
 
+// Render student marks
+function renderStudentMarks(marks) {
+    if (!marks || marks.length === 0) {
+        return `<div class="no-marks">No marks recorded for this student yet.</div>`;
+    }
+    
+    // Group marks by term/period
+    const marksByTerm = {};
+    marks.forEach(mark => {
+        if (!marksByTerm[mark.term]) {
+            marksByTerm[mark.term] = [];
+        }
+        marksByTerm[mark.term].push(mark);
+    });
+    
+    let html = '';
+    
+    // Render marks by term
+    for (const [term, termMarks] of Object.entries(marksByTerm)) {
+        html += `
+            <div class="marks-term">
+                <h4>${term}</h4>
+                <div class="marks-table-wrapper">
+                    <table class="marks-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Grade</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+        
+        termMarks.forEach(mark => {
+            html += `
+                <tr>
+                    <td>${mark.subject}</td>
+                    <td>${mark.score}/100</td>
+                    <td><span class="grade-badge grade-${mark.grade.charAt(0).toLowerCase()}">${mark.grade}</span></td>
+                    <td>
+                        <button onclick="editMarks(${mark.id})" class="action-icon edit small"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteMarks(${mark.id})" class="action-icon delete small"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        html += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+    }
+    
+    return html;
+}
+
+function showMarksForm(studentId) {
+    try {
+        console.log("Opening marks form for student:", studentId);
+        const formContainer = document.getElementById('marks-form-container');
+        if (!formContainer) {
+            console.error("Marks form container not found");
+            return;
+        }
+        
+        formContainer.classList.remove('hidden');
+        document.getElementById('marks-student-id').value = studentId;
+        document.getElementById('marks-id').value = '';
+        document.getElementById('marks-form').reset();
+    } catch (err) {
+        console.error("Error showing marks form:", err);
+        showNotification("Error showing marks form", 'error');
+    }
+}
+
+function hideMarksForm() {
+    try {
+        const formContainer = document.getElementById('marks-form-container');
+        if (formContainer) {
+            formContainer.classList.add('hidden');
+        }
+    } catch (err) {
+        console.error("Error hiding marks form:", err);
+    }
+}
+
+async function saveMarks() {
+    try {
+        const markId = document.getElementById('marks-id').value.trim();
+        const studentId = parseInt(document.getElementById('marks-student-id').value);
+        
+        if (isNaN(studentId)) {
+            throw new Error("Invalid student ID");
+        }
+        
+        const mark = {
+            studentId: studentId,
+            subject: document.getElementById('marks-subject').value,
+            term: document.getElementById('marks-term').value,
+            score: parseInt(document.getElementById('marks-score').value),
+            grade: document.getElementById('marks-grade').value,
+            comments: document.getElementById('marks-comments').value,
+            date: new Date().toISOString()
+        };
+        
+        if (markId) {
+            // Update existing mark
+            mark.id = parseInt(markId);
+            await schoolDB.update('marks', mark);
+            showNotification('Marks updated successfully!');
+        } else {
+            // Add new marks
+            await schoolDB.add('marks', mark);
+            showNotification('New marks added successfully!');
+        }
+        
+        // Refresh the student marks display
+        const allMarks = await schoolDB.getAll('marks');
+        const studentMarks = allMarks.filter(m => m.studentId === mark.studentId);
+        const marksListElement = document.getElementById('student-marks-list');
+        if (marksListElement) {
+            marksListElement.innerHTML = renderStudentMarks(studentMarks);
+        }
+        
+        hideMarksForm();
+    } catch (error) {
+        console.error('Error saving marks:', error);
+        showNotification('Failed to save marks. Please try again.', 'error');
+    }
+}
+
+async function editMarks(id) {
+    try {
+        console.log("Editing mark with ID:", id);
+        const mark = await schoolDB.getById('marks', id);
+        if (!mark) {
+            showNotification('Mark not found.', 'error');
+            return;
+        }
+        
+        document.getElementById('marks-id').value = mark.id;
+        document.getElementById('marks-student-id').value = mark.studentId;
+        document.getElementById('marks-subject').value = mark.subject;
+        document.getElementById('marks-term').value = mark.term;
+        document.getElementById('marks-score').value = mark.score;
+        document.getElementById('marks-grade').value = mark.grade;
+        document.getElementById('marks-comments').value = mark.comments || '';
+        
+        const formContainer = document.getElementById('marks-form-container');
+        if (formContainer) {
+            formContainer.classList.remove('hidden');
+        } else {
+            console.error("Marks form container not found");
+        }
+    } catch (error) {
+        console.error('Error editing mark:', error);
+        showNotification('Failed to load mark details. Please try again.', 'error');
+    }
+}
+
+async function deleteMarks(id) {
+    try {
+        if (!confirm('Are you sure you want to delete these marks?')) {
+            return;
+        }
+        
+        console.log("Deleting mark with ID:", id);
+        const mark = await schoolDB.getById('marks', id);
+        if (!mark) {
+            showNotification('Mark not found.', 'error');
+            return;
+        }
+        
+        const studentId = mark.studentId;
+        await schoolDB.delete('marks', id);
+        
+        // Refresh the student marks display
+        const allMarks = await schoolDB.getAll('marks');
+        const studentMarks = allMarks.filter(m => m.studentId === studentId);
+        const marksListElement = document.getElementById('student-marks-list');
+        if (marksListElement) {
+            marksListElement.innerHTML = renderStudentMarks(studentMarks);
+        }
+        
+        showNotification('Marks deleted successfully!');
+    } catch (error) {
+        console.error('Error deleting mark:', error);
+        showNotification('Failed to delete marks. Please try again.', 'error');
+    }
+}
+
 // Make functions available globally
 window.editStudent = editStudent;
 window.deleteStudent = deleteStudent;
@@ -810,3 +1140,8 @@ window.stylizeCloudNextra = stylizeCloudNextra;
 window.filterStudentsByGrade = filterStudentsByGrade;
 window.viewStudentProfile = viewStudentProfile;
 window.viewTeacherProfile = viewTeacherProfile;
+window.showMarksForm = showMarksForm;
+window.hideMarksForm = hideMarksForm;
+window.saveMarks = saveMarks;
+window.editMarks = editMarks;
+window.deleteMarks = deleteMarks;
