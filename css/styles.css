@@ -1503,6 +1503,177 @@ textarea {
     }
 }
 
+/* Student View Tabs */
+.view-tabs {
+    display: flex;
+    background-color: #fff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 15px;
+}
+
+.view-tabs .tab-btn {
+    padding: 12px 20px;
+    margin-right: 5px;
+}
+
+/* Class View Styling */
+.grade-accordion {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    margin-bottom: 15px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+.grade-accordion:hover {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.grade-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.grade-header:hover {
+    background-color: #eff1f3;
+}
+
+.grade-title {
+    font-size: 18px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.grade-title i {
+    color: var(--primary-color);
+}
+
+.grade-count {
+    font-size: 14px;
+    color: var(--gray-color);
+    font-weight: normal;
+    margin-left: 10px;
+}
+
+.toggle-grade-btn {
+    background: none;
+    border: none;
+    color: var(--gray-color);
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.toggle-grade-btn i {
+    transition: transform 0.3s ease;
+}
+
+.grade-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.grade-accordion.active .grade-content {
+    max-height: 2000px; /* Large enough to show all content */
+    transition: max-height 0.5s ease;
+}
+
+.student-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
+.student-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s var(--animation-timing);
+    border-top: 3px solid var(--primary-color);
+    position: relative;
+}
+
+.student-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+}
+
+.student-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, var(--primary-color), #4285f4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.student-info {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.student-info h4 {
+    margin: 5px 0;
+    font-size: 16px;
+    color: var(--dark-color);
+    font-weight: 500;
+}
+
+.student-id {
+    font-size: 13px;
+    color: var(--gray-color);
+    margin: 0;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    width: 100%;
+}
+
+.empty-state {
+    padding: 40px;
+    text-align: center;
+    color: var(--gray-color);
+    font-style: italic;
+}
+
+/* Responsive adjustments for class view */
+@media screen and (max-width: 768px) {
+    .student-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .grade-title {
+        font-size: 16px;
+    }
+}
+
 .hidden {
     display: none;
 }

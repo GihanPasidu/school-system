@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('student-form').addEventListener('submit', saveStudent);
     document.getElementById('student-search').addEventListener('input', searchStudents);
     document.getElementById('grade-filter').addEventListener('change', filterStudentsByGrade);
+    
+    // Student view tabs
+    document.getElementById('list-view-tab').addEventListener('click', () => switchStudentView('list'));
+    document.getElementById('class-view-tab').addEventListener('click', () => switchStudentView('class'));
 
     // Teachers management
     document.getElementById('add-teacher-btn').addEventListener('click', showTeacherForm);
@@ -161,6 +165,187 @@ function highlightElement(element) {
     }, 1000);
 }
 
+// New function to switch between list and class views of students
+function switchStudentView(viewType) {
+    // Update active tab
+    document.querySelectorAll('.student-view-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    document.getElementById(`${viewType}-view-tab`).classList.add('active');
+    
+    // Hide all views
+    document.querySelectorAll('.student-view').forEach(view => {
+        view.classList.add('hidden');
+    });
+    
+    // Show selected view
+    document.getElementById(`${viewType}-view`).classList.remove('hidden');
+    
+    // If switching to class view, refresh it
+    if (viewType === 'class') {
+        loadClassView();
+    } else {
+        loadStudents(); // Refresh the list view
+    }
+}
+
+// Function to load and display students by grade in the class view
+async function loadClassView() {
+    try {
+        showLoading('Loading class view...');
+        
+        const students = await schoolDB.getAll('students');
+        const classViewContainer = document.getElementById('class-view-container');
+        classViewContainer.innerHTML = '';
+        
+        // Group students by grade
+        const gradeGroups = {};
+        students.forEach(student => {
+            const grade = student.grade || 'Unassigned';
+            if (!gradeGroups[grade]) {
+                gradeGroups[grade] = [];
+            }
+            gradeGroups[grade].push(student);
+        });
+        
+        // Sort grades numerically
+        const sortedGrades = Object.keys(gradeGroups).sort((a, b) => {
+            // Handle 'Unassigned' separately
+            if (a === 'Unassigned') return 1;
+            if (b === 'Unassigned') return -1;
+            return parseInt(a) - parseInt(b);
+        });
+        
+        if (sortedGrades.length === 0) {
+            classViewContainer.innerHTML = '<div class="empty-state">No students found</div>';
+            hideLoading();
+            return;
+        }
+        
+        // Create accordion for each grade
+        sortedGrades.forEach((grade, index) => {
+            const studentsInGrade = gradeGroups[grade];
+            const gradeAccordion = document.createElement('div');
+            gradeAccordion.className = 'grade-accordion';
+            
+            // Create the header section
+            const gradeHeader = document.createElement('div');
+            gradeHeader.className = 'grade-header';
+            gradeHeader.innerHTML = `
+                <div class="grade-title">
+                    <i class="fas fa-graduation-cap"></i> 
+                    Grade ${grade}
+                    <span class="grade-count">${studentsInGrade.length} students</span>
+                </div>
+                <div class="grade-actions">
+                    <button class="toggle-grade-btn">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            `;
+            
+            // Create the content section
+            const gradeContent = document.createElement('div');
+            gradeContent.className = 'grade-content';
+            
+            // Add student cards
+            const studentGrid = document.createElement('div');
+            studentGrid.className = 'student-grid';
+            
+            studentsInGrade.forEach(student => {
+                // Get first letter of student name for avatar
+                const firstLetter = student.name.charAt(0).toUpperCase();
+                
+                // Create student card
+                const studentCard = document.createElement('div');
+                studentCard.className = 'student-card';
+                studentCard.innerHTML = `
+                    <div class="student-avatar">${firstLetter}</div>
+                    <div class="student-info">
+                        <h4>${student.name}</h4>
+                        <p class="student-id">ID: ${student.admission}</p>
+                    </div>
+                    <div class="card-actions">
+                        <button onclick="viewStudentProfile(${student.id})" class="action-icon view small">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button onclick="editStudent(${student.id})" class="action-icon edit small">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deleteStudent(${student.id})" class="action-icon delete small">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `;
+                
+                studentGrid.appendChild(studentCard);
+            });
+            
+            gradeContent.appendChild(studentGrid);
+            
+            // Append header and content to accordion
+            gradeAccordion.appendChild(gradeHeader);
+            gradeAccordion.appendChild(gradeContent);
+            
+            // Add animation delay based on index
+            gradeAccordion.style.animation = `slideUp 0.4s ${0.1 * index}s var(--animation-timing) both`;
+            
+            // Add event listener to toggle accordion
+            gradeHeader.addEventListener('click', () => {
+                gradeAccordion.classList.toggle('active');
+                const chevron = gradeHeader.querySelector('.fa-chevron-down');
+                if (gradeAccordion.classList.contains('active')) {
+                    chevron.style.transform = 'rotate(180deg)';
+                } else {
+                    chevron.style.transform = 'rotate(0)';
+                }
+            });
+            
+            // Append to container
+            classViewContainer.appendChild(gradeAccordion);
+            
+            // Auto-open the first accordion
+            if (index === 0) {
+                setTimeout(() => {
+                    gradeAccordion.classList.add('active');
+                    gradeHeader.querySelector('.fa-chevron-down').style.transform = 'rotate(180deg)';
+                }, 500);
+            }
+        });
+        
+        hideLoading();
+    } catch (error) {
+        console.error('Error loading class view:', error);
+        hideLoading();
+    }
+}
+
+// Modify the filterStudentsByGrade function to handle both views
+async function filterStudentsByGrade() {
+    // Reuse the loadStudents function which handles both search and grade filters
+    await loadStudents();
+    
+    const gradeFilter = document.getElementById('grade-filter').value;
+    if (gradeFilter) {
+        showNotification(`Filtered to show Grade ${gradeFilter} students`);
+        
+        // If in class view, auto-open the filtered grade
+        if (!document.getElementById('class-view').classList.contains('hidden')) {
+            loadClassView().then(() => {
+                // Find the grade accordion matching the filter
+                const accordions = document.querySelectorAll('.grade-accordion');
+                accordions.forEach(accordion => {
+                    const gradeTitle = accordion.querySelector('.grade-title').textContent;
+                    if (gradeTitle.includes(`Grade ${gradeFilter}`)) {
+                        accordion.classList.add('active');
+                        accordion.querySelector('.fa-chevron-down').style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+        }
+    }
+}
+
 // Student management functions
 async function loadStudents() {
     try {
@@ -216,6 +401,12 @@ async function loadStudents() {
             
             studentsList.appendChild(row);
         });
+        
+        // Call loadClassView if the class view is visible
+        if (document.getElementById('class-view') && 
+            !document.getElementById('class-view').classList.contains('hidden')) {
+            await loadClassView();
+        }
         
         hideLoading();
     } catch (error) {
@@ -307,17 +498,6 @@ async function searchStudents() {
     // Instead of making a separate DB call, let's just use loadStudents
     // which will respect both the search term and grade filter
     await loadStudents();
-}
-
-// New function to filter students by grade
-async function filterStudentsByGrade() {
-    // Reuse the loadStudents function which handles both search and grade filters
-    await loadStudents();
-    
-    const gradeFilter = document.getElementById('grade-filter').value;
-    if (gradeFilter) {
-        showNotification(`Filtered to show Grade ${gradeFilter} students`);
-    }
 }
 
 // Teacher management functions with animations
@@ -1145,3 +1325,5 @@ window.hideMarksForm = hideMarksForm;
 window.saveMarks = saveMarks;
 window.editMarks = editMarks;
 window.deleteMarks = deleteMarks;
+window.switchStudentView = switchStudentView;
+window.loadClassView = loadClassView;

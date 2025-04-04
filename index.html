@@ -177,21 +177,41 @@
                                 <button type="submit" id="save-student" class="success-button"><i class="fas fa-save"></i> Save</button>
                             </div>
                         </form>
-
-                        <table id="students-table">
-                            <thead>
-                                <tr>
-                                    <th>Admission No</th>
-                                    <th>Name</th>
-                                    <th>Grade</th>
-                                    <th>Contact</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="students-list">
-                                <!-- Student records will be inserted here -->
-                            </tbody>
-                        </table>
+                        
+                        <!-- View Selection Tabs -->
+                        <div class="view-tabs">
+                            <button id="list-view-tab" class="tab-btn student-view-tab active">
+                                <i class="fas fa-list"></i> List View
+                            </button>
+                            <button id="class-view-tab" class="tab-btn student-view-tab">
+                                <i class="fas fa-users"></i> Class View
+                            </button>
+                        </div>
+                        
+                        <!-- List View (original view) -->
+                        <div id="list-view" class="student-view">
+                            <table id="students-table">
+                                <thead>
+                                    <tr>
+                                        <th>Admission No</th>
+                                        <th>Name</th>
+                                        <th>Grade</th>
+                                        <th>Contact</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="students-list">
+                                    <!-- Student records will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Class View (new view) -->
+                        <div id="class-view" class="student-view hidden">
+                            <div id="class-view-container">
+                                <!-- Grade groups will be inserted here -->
+                            </div>
+                        </div>
                     </div>
                 </section>
 
