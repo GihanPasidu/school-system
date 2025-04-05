@@ -8,5 +8,235 @@
     "comments": "Excellent work!",
     "date": "2024-04-05T09:30:41.126Z",
     "id": 1
+  },
+  {
+    "studentId": "S1001",
+    "subject": "English",
+    "term": "Term 1",
+    "score": 85,
+    "grade": "A",
+    "comments": "Good reading comprehension",
+    "date": "2024-04-05T09:30:41.126Z",
+    "id": 2
+  },
+  {
+    "studentId": "S1001",
+    "subject": "Science",
+    "term": "Term 1",
+    "score": 92,
+    "grade": "A+",
+    "comments": "Shows great interest in experiments",
+    "date": "2024-04-05T09:30:41.126Z",
+    "id": 3
+  },
+  {
+    "studentId": "S1001",
+    "subject": "Social Studies",
+    "term": "Term 1",
+    "score": 88,
+    "grade": "A",
+    "comments": "Participates well in discussions",
+    "date": "2024-04-05T09:30:41.126Z",
+    "id": 4
+  },
+  {
+    "studentId": "S1001",
+    "subject": "Arts",
+    "term": "Term 1",
+    "score": 95,
+    "grade": "A+",
+    "comments": "Creative and talented artist",
+    "date": "2024-04-05T09:30:41.126Z",
+    "id": 5
+  },
+  {
+    "studentId": "S1001",
+    "subject": "Physical Education",
+    "term": "Term 1",
+    "score": 89,
+    "grade": "A",
+    "comments": "Good team player",
+    "date": "2024-04-05T09:30:41.126Z",
+    "id": 6
+  },
+  {
+    "studentId": "S1002",
+    "subject": "Mathematics",
+    "term": "Term 1",
+    "score": 82,
+    "grade": "B+",
+    "comments": "Good understanding of concepts",
+    "date": "2024-04-05T09:35:41.126Z",
+    "id": 7
+  },
+  {
+    "studentId": "S1002",
+    "subject": "English",
+    "term": "Term 1",
+    "score": 78,
+    "grade": "B",
+    "comments": "Needs to improve writing skills",
+    "date": "2024-04-05T09:35:41.126Z",
+    "id": 8
+  },
+  {
+    "studentId": "S1002",
+    "subject": "Science",
+    "term": "Term 1",
+    "score": 88,
+    "grade": "A",
+    "comments": "Curious and asks good questions",
+    "date": "2024-04-05T09:35:41.126Z",
+    "id": 9
+  },
+  {
+    "studentId": "S1002",
+    "subject": "Social Studies",
+    "term": "Term 1",
+    "score": 75,
+    "grade": "B",
+    "comments": "Should participate more in class",
+    "date": "2024-04-05T09:35:41.126Z",
+    "id": 10
+  },
+  {
+    "studentId": "S1002",
+    "subject": "Arts",
+    "term": "Term 1",
+    "score": 85,
+    "grade": "A",
+    "comments": "Shows good creativity",
+    "date": "2024-04-05T09:35:41.126Z",
+    "id": 11
+  },
+  {
+    "studentId": "S1002",
+    "subject": "Physical Education",
+    "term": "Term 1",
+    "score": 90,
+    "grade": "A+",
+    "comments": "Athletic and enthusiastic",
+    "date": "2024-04-05T09:35:41.126Z",
+    "id": 12
+  },
+  {
+    "studentId": "S1003",
+    "subject": "Mathematics",
+    "term": "Term 1",
+    "score": 95,
+    "grade": "A+",
+    "comments": "Exceptional problem solver",
+    "date": "2024-04-05T09:40:41.126Z",
+    "id": 13
+  },
+  {
+    "studentId": "S1003",
+    "subject": "English",
+    "term": "Term 1",
+    "score": 92,
+    "grade": "A+",
+    "comments": "Excellent reading and writing skills",
+    "date": "2024-04-05T09:40:41.126Z",
+    "id": 14
+  },
+  {
+    "studentId": "S1003",
+    "subject": "Science",
+    "term": "Term 1",
+    "score": 88,
+    "grade": "A",
+    "comments": "Good understanding of concepts",
+    "date": "2024-04-05T09:40:41.126Z",
+    "id": 15
+  },
+  {
+    "studentId": "S1003",
+    "subject": "Social Studies",
+    "term": "Term 1",
+    "score": 85,
+    "grade": "A",
+    "comments": "Insightful contributions to discussions",
+    "date": "2024-04-05T09:40:41.126Z",
+    "id": 16
+  },
+  {
+    "studentId": "S1003",
+    "subject": "Arts",
+    "term": "Term 1",
+    "score": 80,
+    "grade": "B+",
+    "comments": "Improving creativity",
+    "date": "2024-04-05T09:40:41.126Z",
+    "id": 17
+  },
+  {
+    "studentId": "S1003",
+    "subject": "Physical Education",
+    "term": "Term 1",
+    "score": 82,
+    "grade": "B+",
+    "comments": "Good effort in all activities",
+    "date": "2024-04-05T09:40:41.126Z",
+    "id": 18
+  },
+  {
+    "studentId": "S1005",
+    "subject": "Mathematics",
+    "term": "Term 1",
+    "score": 68,
+    "grade": "C+",
+    "comments": "Needs more practice with number concepts",
+    "date": "2024-04-05T09:45:41.126Z",
+    "id": 19
+  },
+  {
+    "studentId": "S1005",
+    "subject": "English",
+    "term": "Term 1",
+    "score": 75,
+    "grade": "B",
+    "comments": "Improving reading comprehension",
+    "date": "2024-04-05T09:45:41.126Z",
+    "id": 20
+  },
+  {
+    "studentId": "S1005",
+    "subject": "Science",
+    "term": "Term 1",
+    "score": 78,
+    "grade": "B",
+    "comments": "Shows interest in experiments",
+    "date": "2024-04-05T09:45:41.126Z",
+    "id": 21
+  },
+  {
+    "studentId": "S1005",
+    "subject": "Social Studies",
+    "term": "Term 1",
+    "score": 72,
+    "grade": "C+",
+    "comments": "Needs to participate more",
+    "date": "2024-04-05T09:45:41.126Z",
+    "id": 22
+  },
+  {
+    "studentId": "S1005",
+    "subject": "Arts",
+    "term": "Term 1",
+    "score": 88,
+    "grade": "A",
+    "comments": "Creative and enthusiastic",
+    "date": "2024-04-05T09:45:41.126Z",
+    "id": 23
+  },
+  {
+    "studentId": "S1005",
+    "subject": "Physical Education",
+    "term": "Term 1",
+    "score": 80,
+    "grade": "B+",
+    "comments": "Good teamwork skills",
+    "date": "2024-04-05T09:45:41.126Z",
+    "id": 24
   }
 ]

@@ -10,9 +10,11 @@ async function initCharts() {
     try {
         const students = await schoolDB.getAll('students');
         const teachers = await schoolDB.getAll('teachers');
+        const marks = await schoolDB.getAll('marks');
         
         createGradeDistributionChart(students);
         createSubjectDistributionChart(teachers);
+        createMarksDistributionChart(marks, students);
         populateRecentAdmissions(students);
         updateStudentTeacherRatio(students, teachers);
     } catch (error) {
@@ -148,6 +150,113 @@ function createSubjectDistributionChart(teachers) {
             animation: {
                 animateRotate: true,
                 animateScale: true,
+                duration: 2000,
+                easing: 'easeOutQuart'
+            }
+        }
+    });
+}
+
+function createMarksDistributionChart(marks, students) {
+    // Create marks chart for Grade 1 students if the container exists
+    const marksChartContainer = document.getElementById('marksChart');
+    if (!marksChartContainer) return;
+    
+    // Filter grade 1 students and their marks
+    const grade1Students = students.filter(student => student.grade === 1 || student.grade === '1');
+    const grade1StudentIds = grade1Students.map(student => student.id);
+    const grade1Marks = marks.filter(mark => grade1StudentIds.includes(mark.studentId));
+    
+    // Group by subject
+    const subjectMarks = {};
+    const gradeColors = {
+        'A+': 'rgba(52, 168, 83, 0.7)', // Green
+        'A': 'rgba(66, 133, 244, 0.7)',  // Blue
+        'B+': 'rgba(251, 188, 5, 0.7)',  // Yellow
+        'B': 'rgba(234, 187, 53, 0.7)',  // Orange
+        'C+': 'rgba(234, 127, 53, 0.7)', // Light Orange
+        'C': 'rgba(234, 67, 53, 0.7)',   // Red
+        'F': 'rgba(158, 158, 158, 0.7)'  // Gray
+    };
+    
+    // Prepare subjects
+    const subjects = ['Mathematics', 'English', 'Science', 'Social Studies', 'Arts', 'Physical Education'];
+    subjects.forEach(subject => {
+        subjectMarks[subject] = {
+            'A+': 0, 'A': 0, 'B+': 0, 'B': 0, 'C+': 0, 'C': 0, 'F': 0
+        };
+    });
+    
+    // Count grades per subject
+    grade1Marks.forEach(mark => {
+        if (subjects.includes(mark.subject) && mark.grade) {
+            subjectMarks[mark.subject][mark.grade]++;
+        }
+    });
+    
+    // Create datasets for each grade
+    const datasets = [];
+    const grades = ['A+', 'A', 'B+', 'B', 'C+', 'C', 'F'];
+    
+    grades.forEach((grade, index) => {
+        datasets.push({
+            label: grade,
+            data: subjects.map(subject => subjectMarks[subject][grade]),
+            backgroundColor: gradeColors[grade] || `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.7)`,
+            borderColor: gradeColors[grade]?.replace('0.7', '1') || `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`,
+            borderWidth: 1
+        });
+    });
+    
+    const ctx = marksChartContainer.getContext('2d');
+    
+    // Create stacked bar chart for marks distribution
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: subjects,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: true,
+                    title: {
+                        display: true,
+                        text: 'Subjects'
+                    }
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Students'
+                    },
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Grade 1 - Marks Distribution by Subject',
+                    font: {
+                        size: 16
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.parsed.y} students`;
+                        }
+                    }
+                }
+            },
+            animation: {
                 duration: 2000,
                 easing: 'easeOutQuart'
             }
