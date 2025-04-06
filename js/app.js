@@ -171,7 +171,7 @@ function switchStudentView(viewType) {
     document.querySelectorAll('.student-view-tab').forEach(tab => {
         tab.classList.remove('active');
     });
-    document.getElementById(`${viewType}-view-tab`).addClass('active');
+    document.getElementById(`${viewType}-view-tab`).classList.add('active');
 
     // Toggle visibility of different views
     if (viewType === 'list') {
@@ -396,9 +396,8 @@ async function viewStudent(id) {
             return;
         }
         
-        // You might want to create a modal to show student details
-        // For now, we'll just console.log the data and highlight the row
-        console.log('Student Details:', student);
+        // Show student profile overlay
+        showStudentProfile(student);
         
         // Highlight the student's row in the table
         const row = document.querySelector(`#students-list tr[data-id="${id}"]`);
@@ -417,32 +416,526 @@ async function viewStudent(id) {
     }
 }
 
-// Edit student
-async function editStudent(id) {
+// Show student profile
+async function showStudentProfile(student) {
     try {
-        const student = await schoolDB.getById('students', id);
+        // Fetch marks data for this student
+        let marks = [];
+        try {
+            const allMarks = await schoolDB.getAll('marks');
+            marks = allMarks.filter(mark => mark.studentId === student.id);
+        } catch (error) {
+            console.error('Error loading marks:', error);
+        }
         
-        if (!student) {
-            showNotification('Student not found', 'error');
+        // Calculate age
+        let age = '';
+        if (student.dateOfBirth) {
+            const dob = new Date(student.dateOfBirth);
+            const today = new Date();
+            age = today.getFullYear() - dob.getFullYear();
+            
+            // Adjust age if birthday hasn't occurred yet this year
+            if (today.getMonth() < dob.getMonth() || 
+                (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
+                age--;
+            }
+        }
+        
+        // Create modal elements
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        
+        const modal = document.createElement('div');
+        modal.className = 'profile-modal';
+        
+        // Create header
+        const header = document.createElement('div');
+        header.className = 'profile-header';
+        header.innerHTML = `
+            <h2><i class="fas fa-user-graduate"></i> Student Profile</h2>
+            <button class="close-modal">&times;</button>
+        `;
+        
+        // Create profile content
+        const profileContent = document.createElement('div');
+        profileContent.className = 'profile-content';
+        
+        // Create student image section
+        const imageSection = document.createElement('div');
+        imageSection.className = 'profile-image';
+        
+        // Create initials for avatar
+        const initials = `${student.firstName ? student.firstName[0] : ''}${student.lastName ? student.lastName[0] : ''}`;
+        
+        imageSection.innerHTML = `
+            <div class="profile-avatar">${initials}</div>
+            <h3>${student.firstName || ''} ${student.lastName || ''}</h3>
+            <p>ID: ${student.id || ''} | Grade ${student.grade || 'N/A'}</p>
+        `;
+        
+        // Create profile body
+        const profileBody = document.createElement('div');
+        profileBody.className = 'profile-body';
+        
+        // Create tabs
+        const tabs = document.createElement('div');
+        tabs.className = 'profile-tabs';
+        tabs.innerHTML = `
+            <button class="tab-btn active" data-tab="basic">Basic Info</button>
+            <button class="tab-btn" data-tab="contact">Contact</button>
+            <button class="tab-btn" data-tab="academic">Academic Records</button>
+            <button class="tab-btn" data-tab="medical">Medical</button>
+        `;
+        
+        // Create tab content container
+        const tabContent = document.createElement('div');
+        tabContent.className = 'profile-tab-content';
+        
+        // Basic info tab
+        const basicTab = document.createElement('div');
+        basicTab.className = 'tab-pane active';
+        basicTab.id = 'basic-tab';
+        
+        basicTab.innerHTML = `
+            <div class="info-section">
+                <h4><i class="fas fa-user"></i> Student Information</h4>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Full Name</span>
+                        <span class="info-value">${student.firstName || ''} ${student.lastName || ''}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Student ID</span>
+                        <span class="info-value">${student.id || ''}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Date of Birth</span>
+                        <span class="info-value">${student.dateOfBirth || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Age</span>
+                        <span class="info-value">${age ? `${age} years` : 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Gender</span>
+                        <span class="info-value">${student.gender || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Grade</span>
+                        <span class="info-value">${student.grade || 'Not assigned'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Section</span>
+                        <span class="info-value">${student.section || 'Not assigned'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Address</span>
+                        <span class="info-value">${student.address || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Enrollment Date</span>
+                        <span class="info-value">${student.enrollmentDate || 'Not recorded'}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Contact tab
+        const contactTab = document.createElement('div');
+        contactTab.className = 'tab-pane';
+        contactTab.id = 'contact-tab';
+        
+        contactTab.innerHTML = `
+            <div class="info-section">
+                <h4><i class="fas fa-address-book"></i> Contact Information</h4>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Father's Name</span>
+                        <span class="info-value">${student.parentInfo?.fatherName || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Mother's Name</span>
+                        <span class="info-value">${student.parentInfo?.motherName || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Contact Phone</span>
+                        <span class="info-value">${student.parentInfo?.phone || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Email</span>
+                        <span class="info-value">${student.parentInfo?.email || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Emergency Contact</span>
+                        <span class="info-value">${student.emergencyContact || 'Not specified'}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Academic records tab
+        const academicTab = document.createElement('div');
+        academicTab.className = 'tab-pane';
+        academicTab.id = 'academic-tab';
+        
+        // Render marks if available
+        let marksHtml = '<div class="no-records">No academic records found for this student.</div>';
+        
+        if (marks && marks.length > 0) {
+            // Group marks by term/period
+            const marksByTerm = {};
+            marks.forEach(mark => {
+                if (!marksByTerm[mark.term]) {
+                    marksByTerm[mark.term] = [];
+                }
+                marksByTerm[mark.term].push(mark);
+            });
+            
+            marksHtml = '';
+            
+            // Render marks by term
+            for (const [term, termMarks] of Object.entries(marksByTerm)) {
+                marksHtml += `
+                    <div class="marks-section">
+                        <h4>${term}</h4>
+                        <table class="marks-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Score</th>
+                                    <th>Grade</th>
+                                    <th>Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                termMarks.forEach(mark => {
+                    // Determine grade class for styling
+                    let gradeClass = 'grade-c';
+                    if (mark.grade.startsWith('A')) gradeClass = 'grade-a';
+                    else if (mark.grade.startsWith('B')) gradeClass = 'grade-b';
+                    else if (mark.grade.startsWith('F')) gradeClass = 'grade-f';
+                    
+                    marksHtml += `
+                        <tr>
+                            <td>${mark.subject}</td>
+                            <td>${mark.score}/100</td>
+                            <td><span class="grade-badge ${gradeClass}">${mark.grade}</span></td>
+                            <td>${mark.comments || '-'}</td>
+                        </tr>
+                    `;
+                });
+                
+                marksHtml += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+        }
+        
+        academicTab.innerHTML = `
+            <div class="info-section">
+                <h4><i class="fas fa-graduation-cap"></i> Academic Performance</h4>
+                ${marksHtml}
+            </div>
+        `;
+        
+        // Medical info tab
+        const medicalTab = document.createElement('div');
+        medicalTab.className = 'tab-pane';
+        medicalTab.id = 'medical-tab';
+        
+        medicalTab.innerHTML = `
+            <div class="info-section">
+                <h4><i class="fas fa-heartbeat"></i> Medical Information</h4>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Blood Group</span>
+                        <span class="info-value">${student.medicalInfo?.bloodGroup || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Allergies</span>
+                        <span class="info-value">
+                            ${student.medicalInfo?.allergies ? 
+                                student.medicalInfo.allergies.join(', ') : 
+                                'None recorded'}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Assemble the components
+        tabContent.appendChild(basicTab);
+        tabContent.appendChild(contactTab);
+        tabContent.appendChild(academicTab);
+        tabContent.appendChild(medicalTab);
+        
+        profileBody.appendChild(tabs);
+        profileBody.appendChild(tabContent);
+        
+        profileContent.appendChild(imageSection);
+        profileContent.appendChild(profileBody);
+        
+        modal.appendChild(header);
+        modal.appendChild(profileContent);
+        
+        overlay.appendChild(modal);
+        
+        // Add to document
+        document.body.appendChild(overlay);
+        
+        // Show the modal with animation
+        setTimeout(() => {
+            overlay.classList.add('active');
+        }, 10);
+        
+        // Tab switching functionality
+        tabs.querySelectorAll('.tab-btn').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and panes
+                tabs.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+                tabContent.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding pane
+                tab.classList.add('active');
+                const tabId = tab.dataset.tab + '-tab';
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Close button functionality
+        const closeBtn = header.querySelector('.close-modal');
+        closeBtn.addEventListener('click', () => {
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                document.body.removeChild(overlay);
+            }, 300);
+        });
+        
+    } catch (error) {
+        console.error('Error showing student profile:', error);
+        showNotification('Failed to display student profile.', 'error');
+    }
+}
+
+// View teacher details
+async function viewTeacher(id) {
+    try {
+        const teacher = await schoolDB.getById('teachers', id);
+        
+        if (!teacher) {
+            showNotification('Teacher not found', 'error');
             return;
         }
         
-        // Populate form fields
-        document.getElementById('student-id').value = student.id;
-        document.getElementById('student-name').value = `${student.firstName || ''} ${student.lastName || ''}`;
-        document.getElementById('student-grade').value = student.grade || '';
-        document.getElementById('student-dob').value = student.dateOfBirth || '';
-        document.getElementById('student-address').value = student.address || '';
-        document.getElementById('student-contact').value = student.parentInfo?.phone || '';
-        document.getElementById('student-admission').value = student.admission || '';
+        // Show teacher profile
+        showTeacherProfile(teacher);
         
-        // Show form
-        const form = document.getElementById('student-form');
-        form.classList.remove('hidden');
-        form.querySelector('h3').textContent = 'Edit Student';
+        // Highlight the teacher's row in the table
+        const row = document.querySelector(`#teachers-list tr[data-id="${id}"]`);
+        if (row) {
+            highlightElement(row);
+        }
     } catch (error) {
-        console.error('Error editing student:', error);
-        showNotification('Failed to load student data for editing.', 'error');
+        console.error('Error viewing teacher:', error);
+        showNotification('Failed to load teacher details.', 'error');
+    }
+}
+
+// Show teacher profile
+async function showTeacherProfile(teacher) {
+    try {
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        
+        // Create profile modal
+        const modal = document.createElement('div');
+        modal.className = 'profile-modal';
+        
+        // Create header
+        const header = document.createElement('div');
+        header.className = 'profile-header';
+        header.innerHTML = `
+            <h2><i class="fas fa-chalkboard-teacher"></i> Teacher Profile</h2>
+            <button class="close-modal">&times;</button>
+        `;
+        
+        // Create profile content
+        const profileContent = document.createElement('div');
+        profileContent.className = 'profile-content';
+        
+        // Create teacher image section
+        const imageSection = document.createElement('div');
+        imageSection.className = 'profile-image';
+        
+        // Create initials for avatar
+        const initials = `${teacher.firstName ? teacher.firstName[0] : ''}${teacher.lastName ? teacher.lastName[0] : ''}`;
+        
+        imageSection.innerHTML = `
+            <div class="profile-avatar">${initials}</div>
+            <h3>${teacher.firstName || ''} ${teacher.lastName || ''}</h3>
+            <p>ID: ${teacher.id || ''} | ${teacher.subject || 'No subject assigned'}</p>
+        `;
+        
+        // Create profile body
+        const profileBody = document.createElement('div');
+        profileBody.className = 'profile-body';
+        
+        // Create tabs
+        const tabs = document.createElement('div');
+        tabs.className = 'profile-tabs';
+        tabs.innerHTML = `
+            <button class="tab-btn active" data-tab="basic">Basic Info</button>
+            <button class="tab-btn" data-tab="contact">Contact</button>
+            <button class="tab-btn" data-tab="professional">Professional</button>
+        `;
+        
+        // Create tab content container
+        const tabContent = document.createElement('div');
+        tabContent.className = 'profile-tab-content';
+        
+        // Basic info tab
+        const basicTab = document.createElement('div');
+        basicTab.className = 'tab-pane active';
+        basicTab.id = 'basic-tab';
+        
+        basicTab.innerHTML = `
+            <div class="info-section">
+                <h4><i class="fas fa-user"></i> Teacher Information</h4>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Full Name</span>
+                        <span class="info-value">${teacher.firstName || ''} ${teacher.lastName || ''}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Teacher ID</span>
+                        <span class="info-value">${teacher.id || ''}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Employee ID</span>
+                        <span class="info-value">${teacher.employeeId || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Subject</span>
+                        <span class="info-value">${teacher.subject || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Department</span>
+                        <span class="info-value">${teacher.department || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Role</span>
+                        <span class="info-value">${teacher.role || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Join Date</span>
+                        <span class="info-value">${teacher.joinDate || 'Not recorded'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Employment</span>
+                        <span class="info-value">${teacher.isFullTime ? 'Full-time' : 'Part-time'}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Contact tab
+        const contactTab = document.createElement('div');
+        contactTab.className = 'tab-pane';
+        contactTab.id = 'contact-tab';
+        
+        contactTab.innerHTML = `
+            <div class="info-section">
+                <h4><i class="fas fa-address-book"></i> Contact Information</h4>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Email</span>
+                        <span class="info-value">${teacher.email || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Phone</span>
+                        <span class="info-value">${teacher.phone || 'Not specified'}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Professional tab
+        const professionalTab = document.createElement('div');
+        professionalTab.className = 'tab-pane';
+        professionalTab.id = 'professional-tab';
+        
+        professionalTab.innerHTML = `
+            <div class="info-section">
+                <h4><i class="fas fa-briefcase"></i> Professional Information</h4>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Education</span>
+                        <span class="info-value">${teacher.education || 'Not specified'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Experience</span>
+                        <span class="info-value">${calculateExperience(teacher.joinDate) || 'Not specified'}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Assemble the components
+        tabContent.appendChild(basicTab);
+        tabContent.appendChild(contactTab);
+        tabContent.appendChild(professionalTab);
+        
+        profileBody.appendChild(tabs);
+        profileBody.appendChild(tabContent);
+        
+        profileContent.appendChild(imageSection);
+        profileContent.appendChild(profileBody);
+        
+        modal.appendChild(header);
+        modal.appendChild(profileContent);
+        
+        overlay.appendChild(modal);
+        
+        // Add to document
+        document.body.appendChild(overlay);
+        
+        // Show the modal with animation
+        setTimeout(() => {
+            overlay.classList.add('active');
+        }, 10);
+        
+        // Tab switching functionality
+        tabs.querySelectorAll('.tab-btn').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and panes
+                tabs.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+                tabContent.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding pane
+                tab.classList.add('active');
+                const tabId = tab.dataset.tab + '-tab';
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Close button functionality
+        const closeBtn = header.querySelector('.close-modal');
+        closeBtn.addEventListener('click', () => {
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                document.body.removeChild(overlay);
+            }, 300);
+        });
+        
+    } catch (error) {
+        console.error('Error showing teacher profile:', error);
+        showNotification('Failed to display teacher profile.', 'error');
     }
 }
 
@@ -612,31 +1105,6 @@ async function saveTeacher(event) {
     } catch (error) {
         console.error('Error saving teacher:', error);
         showNotification('Failed to save teacher data.', 'error');
-    }
-}
-
-// View teacher details
-async function viewTeacher(id) {
-    try {
-        const teacher = await schoolDB.getById('teachers', id);
-        
-        if (!teacher) {
-            showNotification('Teacher not found', 'error');
-            return;
-        }
-        
-        // You might want to create a modal to show teacher details
-        // For now, we'll just console.log the data and highlight the row
-        console.log('Teacher Details:', teacher);
-        
-        // Highlight the teacher's row in the table
-        const row = document.querySelector(`#teachers-list tr[data-id="${id}"]`);
-        if (row) {
-            highlightElement(row);
-        }
-    } catch (error) {
-        console.error('Error viewing teacher:', error);
-        showNotification('Failed to load teacher details.', 'error');
     }
 }
 
