@@ -306,11 +306,20 @@ class SchoolDatabase {
     // Clear a store
     async clearStore(storeName) {
         try {
+            if (!this.dataFiles[storeName]) {
+                throw new Error(`Invalid store name: ${storeName}`);
+            }
+            
+            // Clear the data in memory
             this.data[storeName] = [];
-            await this.saveFile(this.dataFiles[storeName], JSON.stringify([]));
+            
+            // Save empty array to file
+            await this.saveFile(this.dataFiles[storeName], JSON.stringify([], null, 2));
+            
+            console.log(`Store ${storeName} cleared successfully`);
             return true;
         } catch (error) {
-            console.error(`Error clearing ${storeName}:`, error);
+            console.error(`Error clearing store ${storeName}:`, error);
             throw error;
         }
     }

@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Show loading overlay
-    showLoading('Initializing system...');
+    // Show loading overlay with a clear initialization message
+    showLoading('Initializing system...', true);
 
-    // Initialize UI components after database is ready
+    // Increase timeout slightly to ensure message visibility
     setTimeout(() => {
         initApp();
         hideLoading();
-    }, 1000); // Give database time to initialize
+    }, 1500); // Increased from 1000ms to 1500ms for better visibility
 
     // Navigation
     document.querySelectorAll('nav button').forEach(button => {
@@ -61,7 +61,7 @@ function stylizeCloudNextra() {
 }
 
 // Show loading overlay
-function showLoading(message = 'Loading...') {
+function showLoading(message = 'Loading...', isInitializing = false) {
     let loadingOverlay = document.getElementById('loading-overlay');
 
     if (!loadingOverlay) {
@@ -81,7 +81,17 @@ function showLoading(message = 'Loading...') {
         document.body.appendChild(loadingOverlay);
     }
 
-    document.getElementById('loading-message').textContent = message;
+    const messageElement = document.getElementById('loading-message');
+    messageElement.textContent = message;
+    
+    // Make initialization message more prominent
+    if (isInitializing) {
+        messageElement.style.fontSize = '18px';
+        messageElement.style.fontWeight = 'bold';
+    } else {
+        messageElement.style.fontSize = '';
+        messageElement.style.fontWeight = '';
+    }
 
     // Force reflow to ensure the transition applies
     loadingOverlay.offsetWidth;
