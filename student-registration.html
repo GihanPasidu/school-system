@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Self-Registration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/student-registration.css">
+    <script src="js/db.js" defer></script>
+    <script src="js/student-registration.js" defer></script>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div id="loading-message" class="loading-message">Loading...</div>
+    </div>
+
+    <div class="container registration-container">
+        <header class="registration-header">
+            <h1><i class="fas fa-user-graduate"></i> Student Self-Registration</h1>
+            <div class="school-details">
+                <h2 id="schoolName">School Management</h2>
+                <p id="schoolAddress">Offline System</p>
+            </div>
+        </header>
+
+        <main id="content-area">
+            <div class="registration-wrapper">
+                <div class="registration-message">
+                    <div class="step-status">
+                        <div class="status-circle active" id="step1-status">1</div>
+                        <div class="status-line"></div>
+                        <div class="status-circle" id="step2-status">2</div>
+                        <div class="status-line"></div>
+                        <div class="status-circle" id="step3-status">3</div>
+                    </div>
+                    <h2>Student Registration Form</h2>
+                    <p>Please fill out all required information accurately. Your student ID will be generated automatically.</p>
+                    <p><strong>Note:</strong> Once submitted, you cannot edit this information. Please make sure all details are correct.</p>
+                </div>
+                
+                <!-- Multistep Registration Form -->
+                <form id="student-registration-form" class="registration-form">
+                    <!-- Step 1: Basic Information -->
+                    <div class="form-step active" id="step1">
+                        <h3><i class="fas fa-id-card"></i> Basic Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="student-first-name">First Name*</label>
+                                <input type="text" id="student-first-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="student-last-name">Last Name*</label>
+                                <input type="text" id="student-last-name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="student-dob">Date of Birth*</label>
+                                <input type="date" id="student-dob" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="student-gender">Gender</label>
+                                <select id="student-gender">
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="student-grade">Grade*</label>
+                                <select id="student-grade" required>
+                                    <option value="">Select Grade</option>
+                                    <option value="1">Grade 1</option>
+                                    <option value="2">Grade 2</option>
+                                    <option value="3">Grade 3</option>
+                                    <option value="4">Grade 4</option>
+                                    <option value="5">Grade 5</option>
+                                    <option value="6">Grade 6</option>
+                                    <option value="7">Grade 7</option>
+                                    <option value="8">Grade 8</option>
+                                    <option value="9">Grade 9</option>
+                                    <option value="10">Grade 10</option>
+                                    <option value="11">Grade 11</option>
+                                    <option value="12">Grade 12</option>
+                                    <option value="13">Grade 13</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="next-btn" onclick="nextStep(1)">Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Contact Information -->
+                    <div class="form-step" id="step2">
+                        <h3><i class="fas fa-phone"></i> Contact Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="student-address">Home Address*</label>
+                                <input type="text" id="student-address" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="parent-name">Parent/Guardian Name*</label>
+                                <input type="text" id="parent-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="parent-phone">Parent/Guardian Phone*</label>
+                                <input type="tel" id="parent-phone" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="parent-email">Parent/Guardian Email</label>
+                                <input type="email" id="parent-email">
+                            </div>
+                            <div class="form-group">
+                                <label for="emergency-contact">Emergency Contact Number</label>
+                                <input type="tel" id="emergency-contact">
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="prev-btn" onclick="prevStep(2)"><i class="fas fa-arrow-left"></i> Previous</button>
+                            <button type="button" class="next-btn" onclick="nextStep(2)">Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Additional Information -->
+                    <div class="form-step" id="step3">
+                        <h3><i class="fas fa-info-circle"></i> Additional Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="student-blood-group">Blood Group</label>
+                                <select id="student-blood-group">
+                                    <option value="">Select Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="student-allergies">Allergies (if any)</label>
+                                <input type="text" id="student-allergies" placeholder="Separate multiple allergies with commas">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label for="additional-notes">Additional Notes</label>
+                                <textarea id="additional-notes" rows="3" placeholder="Any other information you want the school to know"></textarea>
+                            </div>
+                        </div>
+                        <div class="confirmation-box">
+                            <input type="checkbox" id="confirm-details" required>
+                            <label for="confirm-details">I confirm that all information provided is accurate and complete. I understand that this information cannot be edited after submission.</label>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="prev-btn" onclick="prevStep(3)"><i class="fas fa-arrow-left"></i> Previous</button>
+                            <button type="submit" class="submit-btn" id="submit-registration"><i class="fas fa-check-circle"></i> Complete Registration</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Confirmation Screen (Shows after successful submission) -->
+                <div id="registration-confirmation" class="registration-confirmation hidden">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2>Registration Successful!</h2>
+                    <p>Your student ID is: <span id="generated-student-id" class="student-id-display"></span></p>
+                    <p>Please save this ID for your records. You will need it to access school systems.</p>
+                    <div class="confirmation-details">
+                        <h3>Registration Details</h3>
+                        <div id="confirmation-details-content"></div>
+                    </div>
+                    <div class="confirmation-actions">
+                        <button id="print-details" class="print-btn"><i class="fas fa-print"></i> Print Details</button>
+                        <a href="index.html" class="home-btn"><i class="fas fa-home"></i> Return to Home</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; <span id="copyright-year">2023</span> CloudNextra Solutions | Sri Lanka School Management System</p>
+        </footer>
+    </div>
+</body>
+</html>
